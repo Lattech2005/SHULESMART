@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHULESMART</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+font-family:Arial,sans-serif;
+background:#f4f7fb;
+color:#172033;
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.header{
+background:#fff;
+text-align:center;
+padding:28px 15px 20px;
+border-bottom:1px solid #ddd;
+}
+
+.logoBox{
+width:90px;
+height:90px;
+margin:auto;
+border-radius:50%;
+overflow:hidden;
+border:2px solid #315efb;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#eef2ff;
+}
+
+.logoBox img{width:100%;height:100%;object-fit:cover}
+.logoPlaceholder{font-size:13px;font-weight:bold}
+
+.header h1{margin-top:12px;font-size:28px;letter-spacing:1px}
+.header p{font-size:13px;font-weight:bold;letter-spacing:2px;margin-top:5px;color:#667085}
+
+.container{width:min(1100px,94%);margin:25px auto}
+
+.card{
+background:#fff;
+border-radius:15px;
+padding:22px;
+margin-bottom:20px;
+box-shadow:0 4px 18px rgba(0,0,0,.07);
+}
+
+.authCard{max-width:590px;margin:35px auto}
+
+h2{margin-bottom:18px}
+
+label{display:block;font-size:14px;font-weight:bold;margin-top:12px}
+
+input,select{
+width:100%;
+padding:13px;
+margin-top:6px;
+margin-bottom:10px;
+border:1px solid #ccd3df;
+border-radius:8px;
+outline:none;
+background:#fff;
+}
+
+input:focus,select:focus{border-color:#315efb}
+
+.primary{
+width:100%;
+padding:14px;
+border:0;
+border-radius:8px;
+background:#315efb;
+color:white;
+font-weight:bold;
+margin-top:7px;
+}
+
+.secondary{
+width:100%;
+padding:12px;
+border:1px solid #ccd3df;
+border-radius:8px;
+background:white;
+margin-top:8px;
+}
+
+.danger{padding:8px 12px;border:0;border-radius:7px;background:#c62828;color:#fff}
+.success{padding:8px 12px;border:0;border-radius:7px;background:#16833f;color:#fff}
+.neutral{padding:8px 12px;border:0;border-radius:7px;background:#eef2f7;color:#172033}
+
+.links{text-align:center;margin-top:15px}
+.linkButton{border:0;background:none;color:#315efb;margin:5px}
+
+.message{font-size:14px;margin-top:12px;line-height:1.5}
+.small{font-size:13px;color:#667085}
+.hidden{display:none!important}
+
+.password{position:relative}
+.password input{padding-right:80px}
+.password button{
+position:absolute;right:6px;top:6px;padding:7px 10px;border:0;border-radius:6px;background:#eef2f7;
+}
+
+.choice{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.choice button{padding:15px;border:0;border-radius:9px;background:#315efb;color:#fff;font-weight:bold}
+
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:18px}
+.logout{padding:10px 15px;border:0;border-radius:8px;background:#c62828;color:white;font-weight:bold}
+
+.nav{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
+.nav button{padding:11px 5px;border:1px solid #d6dce5;border-radius:8px;background:#fff}
+.nav button.active{background:#315efb;color:#fff}
+
+.subnav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.subnav button{padding:9px 14px;border:1px solid #d6dce5;border-radius:20px;background:#fff;font-size:13px}
+.subnav button.active{background:#172033;color:#fff;border-color:#172033}
+
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+.stat{background:#fff;padding:20px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,.06)}
+.stat strong{display:block;font-size:24px;margin-top:8px}
+
+.classGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+.classCard{
+background:#fff;
+border:1px solid #e5e9f0;
+border-radius:12px;
+padding:16px;
+cursor:pointer;
+transition:.15s;
+}
+.classCard:hover{border-color:#315efb}
+.classCard h3{font-size:17px;margin-bottom:6px}
+.classCard span{font-size:12px;color:#667085}
+
+.tableWrap{overflow-x:auto;width:100%}
+table{width:100%;border-collapse:collapse;margin-top:15px;min-width:700px}
+th,td{padding:10px;border-bottom:1px solid #e5e9f0;text-align:left;white-space:nowrap}
+th{background:#f7f9fc}
+
+.checkYes{color:#16833f;font-weight:bold;font-size:18px}
+.checkNo{color:#c62828;font-weight:bold;font-size:18px}
+
+.filters{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+
+.requirementRow{
+display:grid;grid-template-columns:1fr 120px auto;gap:8px;align-items:center;margin-bottom:8px;
+}
+.requirementRow input{margin:0}
+
+.reqCheck{display:flex;align-items:center;gap:8px;padding:8px 0}
+.reqCheck input{width:auto;margin:0}
+
+.badge{display:inline-block;padding:4px 8px;border-radius:20px;font-size:12px;font-weight:bold}
+.badgeYes{background:#e8f7ee;color:#16833f}
+.badgeNo{background:#fdecec;color:#c62828}
+
+.logoUpload{
+padding:12px;background:#eef2ff;border-radius:8px;text-align:center;color:#315efb;font-weight:bold;
+cursor:pointer;display:block;margin-top:10px;
+}
+#logoInput{display:none}
+
+.schoolLogoSmall{
+width:55px;height:55px;border-radius:50%;object-fit:cover;border:2px solid #315efb;
+vertical-align:middle;margin-right:10px;
+}
+.schoolHeading{display:flex;align-items:center;gap:10px}
+.onlineStatus{font-size:12px;font-weight:bold;margin-top:5px}
+
+.exportBox{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.exportBox button{padding:10px 13px;border:1px solid #ccd3df;border-radius:8px;background:#fff}
+
+.trialBanner{padding:10px 14px;border-radius:8px;font-size:13px;font-weight:bold;margin-top:8px;display:inline-block}
+.trialActive{background:#fff4e0;color:#9a6400}
+.trialOk{background:#e8f7ee;color:#16833f}
+
+.lockScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.lockCard{
+background:#fff;border-radius:16px;padding:35px 25px;max-width:480px;width:100%;text-align:center;
+box-shadow:0 8px 30px rgba(0,0,0,.12);
+}
+.lockCard .icon{font-size:48px;margin-bottom:10px}
+.lockCard h2{color:#c62828;margin-bottom:14px}
+.lockCard p{font-size:14px;line-height:1.7;color:#344054;margin-bottom:10px}
+.lockCard .contactBox{background:#f4f7fb;border-radius:10px;padding:15px;margin-top:18px;text-align:left;font-size:14px}
+.lockCard .contactBox strong{display:block;margin-bottom:6px}
+
+.backBtn{
+border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;padding:0;font-size:14px;
+}
+
+@media(max-width:800px){
+.grid{grid-template-columns:repeat(2,1fr)}
+.nav{grid-template-columns:repeat(2,1fr)}
+.filters{grid-template-columns:1fr}
+.classGrid{grid-template-columns:1fr 1fr}
+}
+
+@media(max-width:600px){
+.grid{grid-template-columns:1fr}
+.choice{grid-template-columns:1fr}
+.classGrid{grid-template-columns:1fr}
+.topbar{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+<div class="logoBox">
+<img id="schoolLogo" class="hidden">
+<span id="logoPlaceholder" class="logoPlaceholder">SS</span>
+</div>
+<h1>SHULESMART</h1>
+<p>BY LATTECH</p>
+</header>
+
+<div class="container">
+
+<!-- LANGUAGE -->
+<section id="languageSection">
+<div class="card authCard">
+<h2 data-sw="Chagua Lugha" data-en="Choose Language">Chagua Lugha</h2>
+<select id="language" onchange="changeLanguage()">
+<option value="sw">Kiswahili</option>
+<option value="en">English</option>
+</select>
+<button class="primary" onclick="continueLanguage()"><span data-sw="ENDELEA" data-en="CONTINUE">ENDELEA</span></button>
+</div>
+</section>
+
+<!-- CHOICE -->
+<section id="choiceSection" class="hidden">
+<div class="card authCard">
+<h2 data-sw="Karibu SHULESMART" data-en="Welcome to SHULESMART">Karibu SHULESMART</h2>
+<p class="small" data-sw="Chagua unachotaka kufanya." data-en="Choose what you want to do.">Chagua unachotaka kufanya.</p>
+<div class="choice">
+<button onclick="showLogin()"><span data-sw="INGIA" data-en="LOGIN">INGIA</span></button>
+<button onclick="showRegister()"><span data-sw="FUNGUA ACCOUNT MPYA" data-en="CREATE NEW ACCOUNT">FUNGUA ACCOUNT MPYA</span></button>
+</div>
+<p class="small" style="margin-top:16px" data-sw="Utapata wiki 1 ya majaribio bila malipo ukifungua account mpya." data-en="You get 1 week free trial when you create a new account.">Utapata wiki 1 ya majaribio bila malipo ukifungua account mpya.</p>
+</div>
+</section>
+
+<!-- AUTH -->
+<section id="authSection" class="hidden">
+
+<div id="loginBox" class="card authCard">
+<h2 data-sw="Ingia" data-en="Login">Ingia</h2>
+<label data-sw="Username" data-en="Username">Username</label>
+<input id="loginUsername" type="text">
+<label data-sw="Password" data-en="Password">Password</label>
+<div class="password">
+<input id="loginPassword" type="password">
+<button type="button" onclick="togglePassword('loginPassword',this)" data-sw="Onyesha" data-en="Show">Onyesha</button>
+</div>
+<button class="primary" onclick="login()"><span data-sw="INGIA" data-en="LOGIN">INGIA</span></button>
+<p id="loginMsg" class="message"></p>
+<div class="links">
+<button class="linkButton" onclick="showRegister()" data-sw="Fungua account" data-en="Create account">Fungua account</button>
+<button class="linkButton" onclick="showRecovery()" data-sw="Sahau password?" data-en="Forgot password?">Sahau password?</button>
+</div>
+</div>
+
+<div id="registerBox" class="card authCard hidden">
+<h2 data-sw="Fungua Account" data-en="Create Account">Fungua Account</h2>
+<p class="small" data-sw="Utapata wiki 1 (siku 7) ya kutumia mfumo bure kuanzia leo." data-en="You will get 1 week (7 days) free trial starting today.">Utapata wiki 1 (siku 7) ya kutumia mfumo bure kuanzia leo.</p>
+<label data-sw="Jina la shule" data-en="School name">Jina la shule</label>
+<input id="registerSchool" type="text">
+<label data-sw="Username" data-en="Username">Username</label>
+<input id="registerUsername" type="text">
+<label data-sw="Email" data-en="Email">Email</label>
+<input id="registerEmail" type="email">
+<label data-sw="Namba ya simu" data-en="Phone number">Namba ya simu</label>
+<input id="registerPhone" type="tel">
+<label data-sw="Password" data-en="Password">Password</label>
+<div class="password">
+<input id="registerPassword" type="password">
+<button type="button" onclick="togglePassword('registerPassword',this)" data-sw="Onyesha" data-en="Show">Onyesha</button>
+</div>
+<label data-sw="Rudia password" data-en="Confirm password">Rudia password</label>
+<div class="password">
+<input id="registerPassword2" type="password">
+<button type="button" onclick="togglePassword('registerPassword2',this)" data-sw="Onyesha" data-en="Show">Onyesha</button>
+</div>
+<button class="primary" onclick="register()"><span data-sw="JISAJILI" data-en="REGISTER">JISAJILI</span></button>
+<p id="registerMsg" class="message"></p>
+<div class="links">
+<button class="linkButton" onclick="showLogin()" data-sw="Rudi Login" data-en="Back to Login">Rudi Login</button>
+</div>
+</div>
+
+<div id="recoveryBox" class="card authCard hidden">
+<h2 data-sw="Recover Password" data-en="Recover Password">Recover Password</h2>
+<label data-sw="Email" data-en="Email">Email</label>
+<input id="recoveryEmail" type="email">
+<button class="primary" onclick="recoverPassword()"><span data-sw="TUMA RECOVERY EMAIL" data-en="SEND RECOVERY EMAIL">TUMA RECOVERY EMAIL</span></button>
+<p id="recoveryMsg" class="message"></p>
+<div class="links">
+<button class="linkButton" onclick="showLogin()" data-sw="Rudi Login" data-en="Back to Login">Rudi Login</button>
+</div>
+</div>
+
+</section>
+
+<!-- LOCK SCREEN -->
+<section id="lockSection" class="hidden">
+<div class="lockScreen">
+<div class="lockCard">
+<div class="icon">🔒</div>
+<h2 data-sw="Muda wa Majaribio Umeisha" data-en="Trial Period Ended">Muda wa Majaribio Umeisha</h2>
+<p data-sw="Wiki 1 ya majaribio ya bure ya SHULESMART imekwisha. Ili kuendelea kutumia mfumo, tafadhali lipia subscription." data-en="Your 1 week free trial of SHULESMART has ended. To continue using the system, please pay for a subscription.">Wiki 1 ya majaribio ya bure ya SHULESMART imekwisha. Ili kuendelea kutumia mfumo, tafadhali lipia subscription.</p>
+<div class="contactBox">
+<strong data-sw="Wasiliana ili kulipia:" data-en="Contact to subscribe:">Wasiliana ili kulipia:</strong>
+<span data-sw="Piga simu au tuma ujumbe kwa msimamizi wa SHULESMART kulipia na kufungua account yako." data-en="Call or message the SHULESMART admin to pay and unlock your account.">Piga simu au tuma ujumbe kwa msimamizi wa SHULESMART kulipia na kufungua account yako.</span>
+</div>
+<button class="logout" style="margin-top:20px;width:100%" onclick="logout()">LOGOUT</button>
+</div>
+</div>
+</section>
+
+<!-- APP -->
+<section id="appSection" class="hidden">
+
+<div class="topbar">
+<div class="schoolHeading">
+<img id="topSchoolLogo" class="schoolLogoSmall hidden">
+<div>
+<h2 id="schoolTitle">SHULESMART</h2>
+<p id="userTitle" class="small"></p>
+<p id="connectionStatus" class="onlineStatus"></p>
+<p id="trialBannerText" class="trialBanner hidden"></p>
+</div>
+</div>
+<button class="logout" onclick="logout()">LOGOUT</button>
+</div>
+
+<div class="nav">
+<button id="navDashboard" class="active" onclick="showPage('dashboard')" data-sw="Dashboard" data-en="Dashboard">Dashboard</button>
+<button id="navClasses" onclick="showPage('classes')" data-sw="Madarasa" data-en="Classes">Madarasa</button>
+<button id="navFees" onclick="showPage('fees')" data-sw="Ada" data-en="Fees">Ada</button>
+<button id="navUsers" onclick="showPage('users')" data-sw="Settings" data-en="Settings">Settings</button>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboardPage">
+<div class="grid">
+<div class="stat"><span data-sw="Madarasa" data-en="Classes">Madarasa</span><strong id="classCount">0</strong></div>
+<div class="stat"><span data-sw="Combinations" data-en="Combinations">Combinations</span><strong id="comboCount">0</strong></div>
+<div class="stat"><span data-sw="Wanafunzi" data-en="Students">Wanafunzi</span><strong id="studentCount">0</strong></div>
+<div class="stat"><span data-sw="Wanaodaiwa" data-en="Debtors">Wanaodaiwa</span><strong id="debtorCount">0</strong></div>
+<div class="stat"><span data-sw="Wasiodaiwa" data-en="Completed">Wasiodaiwa</span><strong id="completeCount">0</strong></div>
+<div class="stat"><span data-sw="Ada Iliyokusanywa" data-en="Fees Collected">Ada Iliyokusanywa</span><strong id="feesCollected">0</strong></div>
+<div class="stat"><span data-sw="Ada Inayodaiwa" data-en="Fees Owed">Ada Inayodaiwa</span><strong id="feesOwed">0</strong></div>
+</div>
+
+<div class="card" style="margin-top:20px">
+<h3 data-sw="Madarasa Yako" data-en="Your Classes">Madarasa Yako</h3>
+<p class="small" style="margin-top:6px" data-sw="Bonyeza darasa kuingia moja kwa moja." data-en="Tap a class to open it directly.">Bonyeza darasa kuingia moja kwa moja.</p>
+<div id="dashboardClassGrid" class="classGrid"></div>
+</div>
+</div>
+
+<!-- CLASSES -->
+<div id="classesPage" class="hidden">
+
+<!-- LIST VIEW -->
+<div id="classListView">
+<div class="card">
+<h2 data-sw="Usajili wa Madarasa" data-en="Class Registration">Usajili wa Madarasa</h2>
+<label data-sw="Jina la darasa" data-en="Class name">Jina la darasa</label>
+<input id="className" placeholder="Mfano: Form V">
+<label data-sw="Kiwango" data-en="Level">Kiwango</label>
+<select id="classType">
+<option value="O">O-Level</option>
+<option value="A">A-Level</option>
+</select>
+<h3 style="margin-top:18px" data-sw="Mahitaji ya darasa (kwa O-Level)" data-en="Class requirements (for O-Level)">Mahitaji ya darasa (kwa O-Level)</h3>
+<div id="classRequirements"></div>
+<button class="secondary" onclick="addRequirementRow('classRequirements')" data-sw="+ Ongeza hitaji" data-en="+ Add requirement">Ongeza hitaji</button>
+<button class="primary" onclick="saveClass()"><span data-sw="HIFADHI DARASA" data-en="SAVE CLASS">HIFADHI DARASA</span></button>
+<p id="classMsg" class="message"></p>
+</div>
+
+<div class="card">
+<h2 data-sw="Madarasa yaliyosajiliwa" data-en="Registered Classes">Madarasa yaliyosajiliwa</h2>
+<div class="tableWrap">
+<table><thead><tr><th>Darasa</th><th>Kiwango</th><th>Action</th></tr></thead><tbody id="classTable"></tbody></table>
+</div>
+</div>
+</div>
+
+<!-- DETAIL VIEW -->
+<div id="classDetailView" class="hidden">
+<button class="backBtn" onclick="closeClassDetail()">&larr; Rudi kwenye Madarasa</button>
+<h2 id="classDetailTitle" style="margin-bottom:6px"></h2>
+<p id="classDetailType" class="small" style="margin-bottom:16px"></p>
+
+<div class="subnav">
+<button id="ctabOverview" class="active" onclick="showClassTab('overview')" data-sw="Overview" data-en="Overview">Overview</button>
+<button id="ctabCombos" onclick="showClassTab('combos')" data-sw="Combinations" data-en="Combinations">Combinations</button>
+<button id="ctabStudents" onclick="showClassTab('students')" data-sw="Wanafunzi" data-en="Students">Wanafunzi</button>
+<button id="ctabDebt" onclick="showClassTab('debt')" data-sw="Wanaodaiwa" data-en="Debtors">Wanaodaiwa</button>
+<button id="ctabComplete" onclick="showClassTab('complete')" data-sw="Wasiodaiwa" data-en="Complete">Wasiodaiwa</button>
+</div>
+
+<!-- OVERVIEW -->
+<div id="classTabOverview">
+<div class="grid">
+<div class="stat"><span data-sw="Wanafunzi" data-en="Students">Wanafunzi</span><strong id="ovStudents">0</strong></div>
+<div class="stat"><span data-sw="Wanaodaiwa" data-en="Debtors">Wanaodaiwa</span><strong id="ovDebtors">0</strong></div>
+<div class="stat"><span data-sw="Wasiodaiwa" data-en="Complete">Wasiodaiwa</span><strong id="ovComplete">0</strong></div>
+</div>
+<div class="card" style="margin-top:16px" id="classReqCard">
+<h3 data-sw="Mahitaji ya Darasa" data-en="Class Requirements">Mahitaji ya Darasa</h3>
+<div id="classReqList" style="margin-top:10px"></div>
+<button class="secondary" onclick="editClassRequirements()" data-sw="Hariri Mahitaji" data-en="Edit Requirements">Hariri Mahitaji</button>
+<button class="danger" style="margin-top:8px" onclick="deleteClassFromDetail()" data-sw="FUTA DARASA" data-en="DELETE CLASS">FUTA DARASA</button>
+<p id="classDetailMsg" class="message"></p>
+</div>
+</div>
+
+<!-- COMBINATIONS -->
+<div id="classTabCombos" class="hidden">
+<div class="card">
+<h2 data-sw="Ongeza Combination" data-en="Add Combination">Ongeza Combination</h2>
+<label data-sw="Combination" data-en="Combination">Combination</label>
+<input id="comboName" placeholder="Mfano: PCM">
+<h3 style="margin-top:18px" data-sw="Mahitaji ya Combination" data-en="Combination requirements">Mahitaji ya Combination</h3>
+<div id="comboRequirements"></div>
+<button class="secondary" onclick="addRequirementRow('comboRequirements')">Ongeza hitaji</button>
+<button class="primary" onclick="saveCombination()"><span data-sw="HIFADHI COMBINATION" data-en="SAVE COMBINATION">HIFADHI COMBINATION</span></button>
+<p id="comboMsg" class="message"></p>
+</div>
+<div class="card">
+<h2 data-sw="Combinations zilizopo" data-en="Available Combinations">Combinations zilizopo</h2>
+<div class="tableWrap">
+<table><thead><tr><th>Combination</th><th>Action</th></tr></thead><tbody id="comboTable"></tbody></table>
+</div>
+</div>
+</div>
+
+<!-- STUDENTS -->
+<div id="classTabStudents" class="hidden">
+<div class="card">
+<h2 data-sw="Sajili Mwanafunzi" data-en="Register Student">Sajili Mwanafunzi</h2>
+<label data-sw="Jina la mwanafunzi" data-en="Student name">Jina la mwanafunzi</label>
+<input id="studentName">
+<label data-sw="Admission Number (Hiari)" data-en="Admission Number (Optional)">Admission Number (Hiari)</label>
+<input id="studentAdmission">
+<div id="studentCombinationBox" class="hidden">
+<label data-sw="Combination" data-en="Combination">Combination</label>
+<select id="studentCombination" onchange="showStudentRequirementsFromCombo()"><option value="">Chagua combination</option></select>
+</div>
+<h3 style="margin-top:15px" data-sw="Mahitaji" data-en="Requirements">Mahitaji</h3>
+<div id="studentRequirements"></div>
+<button class="primary" onclick="addStudentToClass()"><span data-sw="ONGEZA MWANAFUNZI" data-en="ADD STUDENT">ONGEZA MWANAFUNZI</span></button>
+<p id="studentMsg" class="message"></p>
+</div>
+
+<div class="card">
+<h2 data-sw="Wanafunzi Wote wa Darasa" data-en="All Students in Class">Wanafunzi Wote wa Darasa</h2>
+<div id="classComboFilterBox" class="hidden" style="margin-top:10px">
+<select id="classComboFilter" onchange="renderClassStudentsTab('students')"><option value="">Combination zote</option></select>
+</div>
+<div class="exportBox">
+<button onclick="exportClassStudents('all')">📥 Export Wote</button>
+</div>
+<div class="tableWrap">
+<table><thead id="studentsHeadAll"></thead><tbody id="studentsBodyAll"></tbody></table>
+</div>
+</div>
+</div>
+
+<!-- DEBTORS -->
+<div id="classTabDebt" class="hidden">
+<div class="card">
+<h2 data-sw="Wanaodaiwa" data-en="Debtors">Wanaodaiwa</h2>
+<div class="exportBox"><button onclick="exportClassStudents('debt')">📥 Export Wanaodaiwa</button></div>
+<div class="tableWrap">
+<table><thead id="studentsHeadDebt"></thead><tbody id="studentsBodyDebt"></tbody></table>
+</div>
+</div>
+</div>
+
+<!-- COMPLETE -->
+<div id="classTabComplete" class="hidden">
+<div class="card">
+<h2 data-sw="Wasiodaiwa" data-en="Complete">Wasiodaiwa</h2>
+<div class="exportBox"><button onclick="exportClassStudents('complete')">📥 Export Wasiodaiwa</button></div>
+<div class="tableWrap">
+<table><thead id="studentsHeadComplete"></thead><tbody id="studentsBodyComplete"></tbody></table>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- FEES -->
+<div id="feesPage" class="hidden">
+<div class="card">
+<h2 data-sw="Malipo" data-en="Payments">Malipo</h2>
+<label data-sw="Mwanafunzi" data-en="Student">Mwanafunzi</label>
+<select id="feeStudentSelect"></select>
+<label data-sw="Kiasi" data-en="Amount">Kiasi</label>
+<input id="feeAmount" type="number">
+<label data-sw="Maelezo" data-en="Description">Maelezo</label>
+<input id="feeDescription">
+<button class="primary" onclick="addFee()"><span data-sw="HIFADHI MALIPO" data-en="SAVE PAYMENT">HIFADHI MALIPO</span></button>
+<p id="feeMsg" class="message"></p>
+<div class="tableWrap">
+<table><thead><tr><th>Mwanafunzi</th><th>Kiasi</th><th>Maelezo</th></tr></thead><tbody id="feeTable"></tbody></table>
+</div>
+</div>
+</div>
+
+<!-- SETTINGS -->
+<div id="usersPage" class="hidden">
+<div class="card">
+<h2 data-sw="Settings za Shule" data-en="School Settings">Settings za Shule</h2>
+<label data-sw="Jina la shule" data-en="School name">Jina la shule</label>
+<input id="settingsSchool">
+<label data-sw="Username" data-en="Username">Username</label>
+<input id="settingsUsername">
+<label data-sw="Email" data-en="Email">Email</label>
+<input id="settingsEmail" type="email">
+<label data-sw="Namba ya simu" data-en="Phone number">Namba ya simu</label>
+<input id="settingsPhone" type="tel">
+<button class="primary" onclick="saveSettings()"><span data-sw="HIFADHI MABADILIKO" data-en="SAVE CHANGES">HIFADHI MABADILIKO</span></button>
+<p id="settingsMsg" class="message"></p>
+</div>
+
+<div class="card">
+<h2 data-sw="Hali ya Subscription" data-en="Subscription Status">Hali ya Subscription</h2>
+<p id="subStatusText" class="small"></p>
+</div>
+
+<div class="card">
+<h2 data-sw="Nembo ya Shule" data-en="School Logo">Nembo ya Shule</h2>
+<label for="logoInput" class="logoUpload" data-sw="BADILISHA NEMBO" data-en="CHANGE LOGO">BADILISHA NEMBO</label>
+<input id="logoInput" type="file" accept="image/*" onchange="uploadLogo(event)">
+<button class="danger" style="margin-top:10px" onclick="deleteLogo()" data-sw="FUTA NEMBO" data-en="DELETE LOGO">FUTA NEMBO</button>
+<p id="logoMsg" class="message"></p>
+</div>
+
+<div class="card">
+<h2 data-sw="Badilisha Password" data-en="Change Password">Badilisha Password</h2>
+<label data-sw="Password ya sasa" data-en="Current password">Password ya sasa</label>
+<div class="password">
+<input id="currentPassword" type="password">
+<button type="button" onclick="togglePassword('currentPassword',this)" data-sw="Onyesha" data-en="Show">Onyesha</button>
+</div>
+<label data-sw="Password mpya" data-en="New password">Password mpya</label>
+<div class="password">
+<input id="newPassword" type="password">
+<button type="button" onclick="togglePassword('newPassword',this)" data-sw="Onyesha" data-en="Show">Onyesha</button>
+</div>
+<button class="primary" onclick="changePassword()"><span data-sw="BADILISHA PASSWORD" data-en="CHANGE PASSWORD">BADILISHA PASSWORD</span></button>
+<p id="passwordMsg" class="message"></p>
+</div>
+</div>
+
+</section>
+
+</div>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+
+const firebaseConfig={
+apiKey:"AIzaSyC8SfZuQr4IvR0eV0mq2w0UAmUMnRxcBpA",
+authDomain:"shule-pro-461c7.firebaseapp.com",
+projectId:"shule-pro-461c7",
+storageBucket:"shule-pro-461c7.firebasestorage.app",
+messagingSenderId:"40497201288",
+appId:"1:40497201288:web:6018e79184b3db7c48df3d",
+measurementId:"G-J3EGJT6QF3"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth=firebase.auth();
+const db=firebase.firestore();
+
+db.enablePersistence({synchronizeTabs:true}).catch(function(e){console.log("Offline persistence:",e.code)});
+
+const TRIAL_DAYS=7;
+
+let currentUser=null;
+let currentUserData=null;
+let allStudents=[];
+let allClasses=[];
+let allCombinations=[];
+let allFees=[];
+let currentClassId=null;
+
+function $(id){return document.getElementById(id)}
+
+/* LANGUAGE */
+function changeLanguage(){
+const language=$("language").value;
+document.querySelectorAll("[data-sw]").forEach(function(el){
+el.textContent=language==="sw"?el.getAttribute("data-sw"):el.getAttribute("data-en");
+});
+}
+function continueLanguage(){
+$("languageSection").classList.add("hidden");
+$("choiceSection").classList.remove("hidden");
+changeLanguage();
+}
+
+/* PASSWORD TOGGLE */
+function togglePassword(id,button){
+const input=$(id);
+if(input.type==="password"){
+input.type="text";
+button.textContent=$("language").value==="sw"?"Ficha":"Hide";
+}else{
+input.type="password";
+button.textContent=$("language").value==="sw"?"Onyesha":"Show";
+}
+}
+
+/* SCREENS */
+function showLogin(){
+$("choiceSection").classList.add("hidden");
+$("authSection").classList.remove("hidden");
+$("loginBox").classList.remove("hidden");
+$("registerBox").classList.add("hidden");
+$("recoveryBox").classList.add("hidden");
+}
+function showRegister(){
+$("choiceSection").classList.add("hidden");
+$("authSection").classList.remove("hidden");
+$("loginBox").classList.add("hidden");
+$("registerBox").classList.remove("hidden");
+$("recoveryBox").classList.add("hidden");
+}
+function showRecovery(){
+$("choiceSection").classList.add("hidden");
+$("authSection").classList.remove("hidden");
+$("loginBox").classList.add("hidden");
+$("registerBox").classList.add("hidden");
+$("recoveryBox").classList.remove("hidden");
+}
+
+/* REGISTER */
+async function register(){
+const school=$("registerSchool").value.trim();
+const username=$("registerUsername").value.trim();
+const email=$("registerEmail").value.trim();
+const phone=$("registerPhone").value.trim();
+const password=$("registerPassword").value;
+const password2=$("registerPassword2").value;
+const msg=$("registerMsg");
+msg.style.color="#c62828";
+
+if(!school||!username||!email||!phone||!password||!password2){msg.textContent="Jaza taarifa zote.";return}
+if(!/^[a-zA-Z0-9._-]{3,30}$/.test(username)){msg.textContent="Username itumie herufi, namba, dot, dash au underscore.";return}
+if(password.length<6){msg.textContent="Password iwe angalau characters 6.";return}
+if(password!==password2){msg.textContent="Passwords hazifanani.";return}
+
+try{
+const usernameDoc=await db.collection("usernames").doc(username.toLowerCase()).get();
+if(usernameDoc.exists){msg.textContent="Username hiyo tayari ipo.";return}
+
+const credential=await auth.createUserWithEmailAndPassword(email,password);
+const uid=credential.user.uid;
+const batch=db.batch();
+
+batch.set(db.collection("users").doc(uid),{
+username:username,email:email,phone:phone,schoolName:school,logoData:"",
+trialStart:firebase.firestore.FieldValue.serverTimestamp(),
+subscriptionStatus:"trial",
+createdAt:firebase.firestore.FieldValue.serverTimestamp()
+});
+
+batch.set(db.collection("usernames").doc(username.toLowerCase()),{uid:uid,email:email});
+await batch.commit();
+
+try{await credential.user.sendEmailVerification()}catch(e){console.log(e)}
+
+msg.style.color="#16833f";
+msg.textContent="Account imetengenezwa. Una wiki 1 ya majaribio bure. Verification email imetumwa.";
+
+}catch(error){
+console.error(error);
+msg.textContent=error.message;
+}
+}
+
+/* LOGIN */
+async function login(){
+const username=$("loginUsername").value.trim();
+const password=$("loginPassword").value;
+const msg=$("loginMsg");
+msg.style.color="#c62828";
+if(!username||!password){msg.textContent="Weka username na password.";return}
+try{
+const usernameDoc=await db.collection("usernames").doc(username.toLowerCase()).get();
+if(!usernameDoc.exists){msg.textContent="Username au password si sahihi.";return}
+const data=usernameDoc.data();
+await auth.signInWithEmailAndPassword(data.email,password);
+}catch(error){
+console.error(error);
+msg.textContent="Username au password si sahihi.";
+}
+}
+
+/* RECOVERY */
+async function recoverPassword(){
+const email=$("recoveryEmail").value.trim();
+const msg=$("recoveryMsg");
+if(!email){msg.textContent="Weka email yako.";return}
+try{
+await auth.sendPasswordResetEmail(email);
+msg.style.color="#16833f";
+msg.textContent="Recovery email imetumwa.";
+}catch(error){
+msg.style.color="#c62828";
+msg.textContent=error.message;
+}
+}
+
+function logout(){auth.signOut()}
+
+/* TRIAL */
+function getTrialInfo(userData){
+if(userData.subscriptionStatus==="active"){return{expired:false,active:true,daysLeft:null}}
+let startMillis=Date.now();
+if(userData.trialStart&&userData.trialStart.toMillis){startMillis=userData.trialStart.toMillis()}
+const elapsedDays=(Date.now()-startMillis)/(1000*60*60*24);
+const daysLeft=Math.max(0,Math.ceil(TRIAL_DAYS-elapsedDays));
+return{expired:elapsedDays>=TRIAL_DAYS,active:false,daysLeft:daysLeft};
+}
+
+function showLockScreen(){
+$("languageSection").classList.add("hidden");
+$("choiceSection").classList.add("hidden");
+$("authSection").classList.add("hidden");
+$("appSection").classList.add("hidden");
+$("lockSection").classList.remove("hidden");
+}
+
+function updateTrialBanner(info){
+const el=$("trialBannerText");
+const settingsText=$("subStatusText");
+if(info.active){
+el.classList.add("hidden");
+if(settingsText){settingsText.textContent="Subscription: Active ✓ (Umeidhinishwa)";settingsText.style.color="#16833f"}
+return;
+}
+el.classList.remove("hidden");
+el.classList.remove("trialOk");
+el.classList.add("trialActive");
+el.textContent=$("language").value==="sw"?("Trial: siku "+info.daysLeft+" zimebaki"):("Trial: "+info.daysLeft+" days left");
+if(settingsText){settingsText.textContent="Subscription: Trial - siku "+info.daysLeft+" zimebaki.";settingsText.style.color="#9a6400"}
+}
+
+/* TOP NAV */
+function showPage(page){
+const pages=["dashboard","classes","fees","users"];
+pages.forEach(function(name){
+$(name+"Page").classList.add("hidden");
+const nav=$("nav"+name.charAt(0).toUpperCase()+name.slice(1));
+if(nav)nav.classList.remove("active");
+});
+$(page+"Page").classList.remove("hidden");
+const nav=$("nav"+page.charAt(0).toUpperCase()+page.slice(1));
+if(nav)nav.classList.add("active");
+
+if(page==="dashboard")loadDashboard();
+
+if(page==="classes"){
+closeClassDetail();
+loadClasses();
+}
+
+if(page==="fees"){
+loadFees();
+loadFeeStudentOptions();
+}
+
+if(page==="users"){
+loadUserData(currentUser);
+}
+}
+
+/* REQUIREMENTS UI (create) */
+function addRequirementRow(containerId,name="",amount=""){
+const box=document.createElement("div");
+box.className="requirementRow";
+box.innerHTML=`
+<input class="reqName" placeholder="Mfano: Ada / Sare / Vitabu" value="${name}">
+<input class="reqAmount" type="number" placeholder="Kiasi" value="${amount}">
+<button class="danger" type="button">X</button>
+`;
+box.querySelector("button").onclick=function(){box.remove()};
+$(containerId).appendChild(box);
+}
+
+function getRequirements(containerId){
+const rows=$(containerId).querySelectorAll(".requirementRow");
+const result=[];
+rows.forEach(function(row){
+const name=row.querySelector(".reqName").value.trim();
+const amount=Number(row.querySelector(".reqAmount").value)||0;
+if(name){
+result.push({id:"r_"+Date.now()+"_"+Math.random().toString(36).slice(2,8),name:name,amount:amount});
+}
+});
+return result;
+}
+
+/* EDIT REQUIREMENTS (prompt based: edit amount / delete / add) */
+async function editRequirementsFlow(collectionName,docId,requirements){
+let reqs=requirements.slice();
+let i=0;
+while(i<reqs.length){
+const r=reqs[i];
+const answer=prompt(
+"Hitaji: "+r.name+"\nKiasi cha sasa: "+r.amount+
+"\n\nWeka kiasi kipya, au andika 'DELETE' kufuta hitaji hili. Bonyeza Cancel kuruka.",
+r.amount
+);
+if(answer===null){i++;continue}
+if(answer.trim().toUpperCase()==="DELETE"){reqs.splice(i,1);continue}
+const num=Number(answer);
+if(!isNaN(num)){r.amount=num}
+i++;
+}
+if(confirm("Ongeza hitaji jipya?")){
+const name=prompt("Jina la hitaji jipya:");
+if(name&&name.trim()){
+const amt=Number(prompt("Kiasi:","0"))||0;
+reqs.push({id:"r_"+Date.now()+"_"+Math.random().toString(36).slice(2,8),name:name.trim(),amount:amt});
+}
+}
+await db.collection("users").doc(currentUser.uid).collection(collectionName).doc(docId).update({requirements:reqs});
+return reqs;
+}
+
+/* SAVE CLASS */
+async function saveClass(){
+if(!currentUser)return;
+const name=$("className").value.trim();
+const type=$("classType").value;
+const msg=$("classMsg");
+if(!name){msg.textContent="Weka jina la darasa.";return}
+const requirements=getRequirements("classRequirements");
+try{
+await db.collection("users").doc(currentUser.uid).collection("classes").add({
+name:name,type:type,requirements:requirements,createdAt:firebase.firestore.FieldValue.serverTimestamp()
+});
+$("className").value="";
+$("classRequirements").innerHTML="";
+msg.style.color="#16833f";
+msg.textContent="Darasa limehifadhiwa.";
+loadClasses();
+}catch(error){
+msg.style.color="#c62828";
+msg.textContent=error.message;
+}
+}
+
+/* LOAD CLASSES */
+async function loadClasses(){
+if(!currentUser)return;
+const table=$("classTable");
+table.innerHTML="";
+allClasses=[];
+try{
+const snap=await db.collection("users").doc(currentUser.uid).collection("classes").orderBy("name").get();
+snap.forEach(function(doc){
+const d=doc.data();
+allClasses.push({id:doc.id,...d});
+const row=document.createElement("tr");
+
+const c1=document.createElement("td");
+c1.textContent=d.name||"";
+
+const c2=document.createElement("td");
+c2.textContent=d.type==="A"?"A-Level":"O-Level";
+
+const c3=document.createElement("td");
+
+const open=document.createElement("button");
+open.className="success";
+open.textContent="Fungua";
+open.style.marginRight="5px";
+open.onclick=function(){openClass(doc.id)};
+
+const edit=document.createElement("button");
+edit.className="neutral";
+edit.textContent="Edit";
+edit.style.marginRight="5px";
+edit.onclick=function(){editClass(doc.id)};
+
+const del=document.createElement("button");
+del.className="danger";
+del.textContent="Delete";
+del.onclick=function(){deleteClass(doc.id)};
+
+c3.appendChild(open);
+c3.appendChild(edit);
+c3.appendChild(del);
+
+row.appendChild(c1);
+row.appendChild(c2);
+row.appendChild(c3);
+table.appendChild(row);
+});
+}catch(error){console.error(error)}
+renderDashboardClassGrid();
+}
+
+/* EDIT CLASS (rename) */
+async function editClass(id){
+const cls=allClasses.find(c=>c.id===id);
+if(!cls)return;
+const newName=prompt("Jina jipya la darasa:",cls.name);
+if(newName===null||!newName.trim())return;
+try{
+await db.collection("users").doc(currentUser.uid).collection("classes").doc(id).update({name:newName.trim()});
+loadClasses();
+}catch(error){alert(error.message)}
+}
+
+/* DELETE CLASS */
+async function deleteClass(id){
+if(!confirm("Una uhakika unataka kufuta darasa? Hii pia itafuta combinations zake."))return;
+await db.collection("users").doc(currentUser.uid).collection("classes").doc(id).delete();
+loadClasses();
+loadDashboard();
+}
+
+async function deleteClassFromDetail(){
+if(!currentClassId)return;
+await deleteClass(currentClassId);
+closeClassDetail();
+}
+
+/* OPEN / CLOSE CLASS DETAIL */
+async function openClass(id){
+currentClassId=id;
+const cls=allClasses.find(c=>c.id===id);
+if(!cls)return;
+
+$("classListView").classList.add("hidden");
+$("classDetailView").classList.remove("hidden");
+
+$("classDetailTitle").textContent=cls.name;
+$("classDetailType").textContent=cls.type==="A"?"A-Level":"O-Level";
+
+if(cls.type==="A"){
+$("ctabCombos").classList.remove("hidden");
+$("classReqCard").classList.add("hidden");
+$("studentCombinationBox").classList.remove("hidden");
+$("classComboFilterBox").classList.remove("hidden");
+}else{
+$("ctabCombos").classList.add("hidden");
+$("classReqCard").classList.remove("hidden");
+$("studentCombinationBox").classList.add("hidden");
+$("classComboFilterBox").classList.add("hidden");
+}
+
+await loadCombinations();
+await loadStudents();
+
+renderClassRequirementsList();
+showClassTab("overview");
+}
+
+function closeClassDetail(){
+currentClassId=null;
+$("classDetailView").classList.add("hidden");
+$("classListView").classList.remove("hidden");
+}
+
+/* CLASS TABS */
+function showClassTab(tab){
+const tabs=["overview","combos","students","debt","complete"];
+tabs.forEach(function(t){
+$("classTab"+t.charAt(0).toUpperCase()+t.slice(1)).classList.add("hidden");
+$("ctab"+t.charAt(0).toUpperCase()+t.slice(1)).classList.remove("active");
+});
+$("classTab"+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.remove("hidden");
+$("ctab"+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add("active");
+
+if(tab==="overview")renderClassOverview();
+if(tab==="combos")renderCombosForClass();
+if(tab==="students"){populateComboFilter();renderClassStudentsTab("students")}
+if(tab==="debt")renderClassStudentsTab("debt");
+if(tab==="complete")renderClassStudentsTab("complete");
+}
+
+function renderClassOverview(){
+const list=allStudents.filter(s=>s.classId===currentClassId);
+$("ovStudents").textContent=list.length;
+$("ovDebtors").textContent=list.filter(s=>!isStudentComplete(s)).length;
+$("ovComplete").textContent=list.filter(s=>isStudentComplete(s)).length;
+}
+
+function renderClassRequirementsList(){
+const cls=allClasses.find(c=>c.id===currentClassId);
+const box=$("classReqList");
+box.innerHTML="";
+if(!cls||!(cls.requirements||[]).length){
+box.innerHTML='<p class="small">Hakuna mahitaji yaliyowekwa.</p>';
+return;
+}
+cls.requirements.forEach(function(r){
+const p=document.createElement("p");
+p.className="small";
+p.textContent=r.name+": "+Number(r.amount||0).toLocaleString();
+box.appendChild(p);
+});
+}
+
+async function editClassRequirements(){
+const cls=allClasses.find(c=>c.id===currentClassId);
+if(!cls)return;
+const updated=await editRequirementsFlow("classes",currentClassId,cls.requirements||[]);
+cls.requirements=updated;
+renderClassRequirementsList();
+$("classDetailMsg").style.color="#16833f";
+$("classDetailMsg").textContent="Mahitaji yamesasishwa.";
+}
+
+/* COMBINATIONS WITHIN CLASS */
+async function saveCombination(){
+if(!currentUser||!currentClassId)return;
+const name=$("comboName").value.trim();
+const msg=$("comboMsg");
+if(!name){msg.textContent="Weka jina la combination.";return}
+const cls=allClasses.find(c=>c.id===currentClassId);
+const requirements=getRequirements("comboRequirements");
+try{
+await db.collection("users").doc(currentUser.uid).collection("combinations").add({
+name:name,classId:currentClassId,className:cls?cls.name:"",
+requirements:requirements,createdAt:firebase.firestore.FieldValue.serverTimestamp()
+});
+$("comboName").value="";
+$("comboRequirements").innerHTML="";
+msg.style.color="#16833f";
+msg.textContent="Combination imehifadhiwa.";
+await loadCombinations();
+renderCombosForClass();
+}catch(error){
+msg.style.color="#c62828";
+msg.textContent=error.message;
+}
+}
+
+async function loadCombinations(){
+if(!currentUser)return;
+allCombinations=[];
+try{
+const snap=await db.collection("users").doc(currentUser.uid).collection("combinations").orderBy("name").get();
+snap.forEach(function(doc){allCombinations.push({id:doc.id,...doc.data()})});
+}catch(error){console.error(error)}
+}
+
+function renderCombosForClass(){
+const table=$("comboTable");
+table.innerHTML="";
+const list=allCombinations.filter(c=>c.classId===currentClassId);
+list.forEach(function(c){
+const row=document.createElement("tr");
+
+const c1=document.createElement("td");
+c1.textContent=c.name;
+
+const c2=document.createElement("td");
+
+const editBtn=document.createElement("button");
+editBtn.className="neutral";
+editBtn.textContent="Edit";
+editBtn.style.marginRight="5px";
+editBtn.onclick=function(){editCombo(c.id)};
+
+const reqBtn=document.createElement("button");
+reqBtn.className="secondary";
+reqBtn.style.width="auto";
+reqBtn.textContent="Mahitaji";
+reqBtn.style.marginRight="5px";
+reqBtn.onclick=function(){editComboRequirements(c.id)};
+
+const delBtn=document.createElement("button");
+delBtn.className="danger";
+delBtn.textContent="Delete";
+delBtn.onclick=function(){deleteCombo(c.id)};
+
+c2.appendChild(editBtn);
+c2.appendChild(reqBtn);
+c2.appendChild(delBtn);
+
+row.appendChild(c1);
+row.appendChild(c2);
+table.appendChild(row);
+});
+
+populateComboFilter();
+populateStudentComboSelect();
+}
+
+async function editCombo(id){
+const combo=allCombinations.find(c=>c.id===id);
+if(!combo)return;
+const newName=prompt("Jina jipya la combination:",combo.name);
+if(newName===null||!newName.trim())return;
+try{
+await db.collection("users").doc(currentUser.uid).collection("combinations").doc(id).update({name:newName.trim()});
+await loadCombinations();
+renderCombosForClass();
+}catch(error){alert(error.message)}
+}
+
+async function editComboRequirements(id){
+const combo=allCombinations.find(c=>c.id===id);
+if(!combo)return;
+await editRequirementsFlow("combinations",id,combo.requirements||[]);
+await loadCombinations();
+renderCombosForClass();
+}
+
+async function deleteCombo(id){
+if(!confirm("Una uhakika unataka kufuta combination hii?"))return;
+await db.collection("users").doc(currentUser.uid).collection("combinations").doc(id).delete();
+await loadCombinations();
+renderCombosForClass();
+}
+
+/* STUDENT FORM WITHIN CLASS */
+function populateStudentComboSelect(){
+const select=$("studentCombination");
+select.innerHTML='<option value="">Chagua combination</option>';
+allCombinations.filter(c=>c.classId===currentClassId).forEach(function(c){
+const o=document.createElement("option");
+o.value=c.id;
+o.textContent=c.name;
+select.appendChild(o);
+});
+}
+
+function populateComboFilter(){
+const select=$("classComboFilter");
+if(!select)return;
+select.innerHTML='<option value="">Combination zote</option>';
+allCombinations.filter(c=>c.classId===currentClassId).forEach(function(c){
+const o=document.createElement("option");
+o.value=c.id;
+o.textContent=c.name;
+select.appendChild(o);
+});
+}
+
+function showStudentRequirementsFromCombo(){
+const cls=allClasses.find(c=>c.id===currentClassId);
+if(cls&&cls.type==="A"){
+const comboId=$("studentCombination").value;
+const combo=allCombinations.find(c=>c.id===comboId);
+showStudentRequirements(combo?combo.requirements||[]:[]);
+}else if(cls){
+showStudentRequirements(cls.requirements||[]);
+}
+}
+
+function showStudentRequirements(requirements){
+const box=$("studentRequirements");
+box.innerHTML="";
+if(!requirements.length){
+box.innerHTML='<p class="small">Hakuna mahitaji yaliyowekwa.</p>';
+return;
+}
+requirements.forEach(function(r){
+const div=document.createElement("div");
+div.className="reqCheck";
+div.innerHTML=`
+<input type="checkbox" class="studentReq" data-id="${r.id}" data-name="${r.name}" data-amount="${r.amount||0}">
+<span>${r.name}</span>
+<span class="small">${r.amount?Number(r.amount).toLocaleString():""}</span>
+`;
+box.appendChild(div);
+});
+}
+
+async function addStudentToClass(){
+if(!currentUser||!currentClassId)return;
+const name=$("studentName").value.trim();
+const admission=$("studentAdmission").value.trim();
+const msg=$("studentMsg");
+if(!name){msg.textContent="Jaza jina la mwanafunzi.";return}
+
+const cls=allClasses.find(c=>c.id===currentClassId);
+let comboId="";
+let comboName="";
+let requirements=[];
+
+if(cls.type==="A"){
+comboId=$("studentCombination").value;
+if(!comboId){msg.textContent="Chagua combination.";return}
+const combo=allCombinations.find(c=>c.id===comboId);
+comboName=combo?combo.name:"";
+requirements=combo?combo.requirements||[]:[];
+}else{
+requirements=cls.requirements||[];
+}
+
+const status={};
+requirements.forEach(function(r){
+const checkbox=document.querySelector('.studentReq[data-id="'+r.id+'"]');
+status[r.id]=checkbox?checkbox.checked:false;
+});
+
+try{
+await db.collection("users").doc(currentUser.uid).collection("students").add({
+name:name,admission:admission,classId:currentClassId,className:cls.name,level:cls.type,
+combinationId:comboId,combinationName:comboName,requirements:requirements,status:status,
+createdAt:firebase.firestore.FieldValue.serverTimestamp()
+});
+
+$("studentName").value="";
+$("studentAdmission").value="";
+$("studentCombination").value="";
+$("studentRequirements").innerHTML="";
+
+msg.style.color="#16833f";
+msg.textContent="Mwanafunzi ameongezwa.";
+
+await loadStudents();
+renderClassOverview();
+renderClassStudentsTab("students");
+loadFeeStudentOptions();
+
+}catch(error){
+msg.style.color="#c62828";
+msg.textContent=error.message;
+}
+}
+
+/* LOAD ALL STUDENTS (global cache) */
+async function loadStudents(){
+if(!currentUser)return;
+allStudents=[];
+try{
+const snap=await db.collection("users").doc(currentUser.uid).collection("students").orderBy("name").get();
+snap.forEach(function(doc){allStudents.push({id:doc.id,...doc.data()})});
+}catch(error){console.error(error)}
+}
+
+function isStudentComplete(student){
+const req=student.requirements||[];
+const status=student.status||{};
+if(!req.length)return true;
+return req.every(function(r){return status[r.id]===true});
+}
+
+/* RENDER CLASS-SCOPED STUDENT TABLES */
+function renderClassStudentsTab(which){
+let list=allStudents.filter(s=>s.classId===currentClassId);
+
+if(which==="students"){
+const comboFilter=$("classComboFilter")?$("classComboFilter").value:"";
+if(comboFilter)list=list.filter(s=>s.combinationId===comboFilter);
+renderStudentTable(list,"studentsHeadAll","studentsBodyAll");
+}
+
+if(which==="debt"){
+list=list.filter(s=>!isStudentComplete(s));
+renderStudentTable(list,"studentsHeadDebt","studentsBodyDebt");
+}
+
+if(which==="complete"){
+list=list.filter(s=>isStudentComplete(s));
+renderStudentTable(list,"studentsHeadComplete","studentsBodyComplete");
+}
+}
+
+function renderStudentTable(list,headId,bodyId){
+const reqMap={};
+list.forEach(function(s){(s.requirements||[]).forEach(function(r){reqMap[r.id]=r.name})});
+
+const head=$(headId);
+head.innerHTML="";
+const hr=document.createElement("tr");
+["Jina","Admission","Combination"].forEach(function(x){
+const th=document.createElement("th");
+th.textContent=x;
+hr.appendChild(th);
+});
+Object.keys(reqMap).forEach(function(id){
+const th=document.createElement("th");
+th.textContent=reqMap[id];
+hr.appendChild(th);
+});
+let th=document.createElement("th");
+th.textContent="Hali";
+hr.appendChild(th);
+th=document.createElement("th");
+th.textContent="Action";
+hr.appendChild(th);
+head.appendChild(hr);
+
+const body=$(bodyId);
+body.innerHTML="";
+
+list.forEach(function(s){
+const row=document.createElement("tr");
+
+function cell(value){
+const td=document.createElement("td");
+td.textContent=value||"-";
+return td;
+}
+
+row.appendChild(cell(s.name));
+row.appendChild(cell(s.admission));
+row.appendChild(cell(s.combinationName));
+
+Object.keys(reqMap).forEach(function(id){
+const td=document.createElement("td");
+const found=(s.requirements||[]).find(r=>r.id===id);
+if(found){
+const ok=(s.status||{})[id]===true;
+td.textContent=ok?"✓":"✗";
+td.className=ok?"checkYes":"checkNo";
+}
+row.appendChild(td);
+});
+
+const state=document.createElement("td");
+state.innerHTML=isStudentComplete(s)
+?'<span class="badge badgeYes">✓ Amekamilisha</span>'
+:'<span class="badge badgeNo">✗ Anadaiwa</span>';
+row.appendChild(state);
+
+const action=document.createElement("td");
+const edit=document.createElement("button");
+edit.className="success";
+edit.textContent="Edit";
+edit.onclick=function(){editStudent(s.id)};
+action.appendChild(edit);
+
+const del=document.createElement("button");
+del.className="danger";
+del.style.marginLeft="5px";
+del.textContent="Delete";
+del.onclick=function(){deleteStudent(s.id)};
+action.appendChild(del);
+
+row.appendChild(action);
+body.appendChild(row);
+});
+}
+
+/* EDIT STUDENT */
+async function editStudent(id){
+const student=allStudents.find(s=>s.id===id);
+if(!student)return;
+
+const newName=prompt("Jina la mwanafunzi:",student.name);
+if(newName===null)return;
+
+const newAdmission=prompt("Admission Number (hiari):",student.admission||"");
+if(newAdmission===null)return;
+
+const status=Object.assign({},student.status||{});
+
+(student.requirements||[]).forEach(function(r){
+const current=status[r.id]===true;
+const answer=confirm(
+r.name+" - "+(current?"✓ Kimekamilika":"✗ Hakijakamilika")+
+"\n\nBonyeza OK = Kimekamilika\nCancel = Hakijakamilika"
+);
+status[r.id]=answer;
+});
+
+try{
+await db.collection("users").doc(currentUser.uid).collection("students").doc(id).update({
+name:newName.trim(),admission:newAdmission.trim(),status:status
+});
+await loadStudents();
+renderClassOverview();
+renderClassStudentsTab("students");
+renderClassStudentsTab("debt");
+renderClassStudentsTab("complete");
+loadDashboard();
+}catch(error){
+alert(error.message);
+}
+}
+
+async function deleteStudent(id){
+if(!confirm("Una uhakika unataka kufuta mwanafunzi?"))return;
+await db.collection("users").doc(currentUser.uid).collection("students").doc(id).delete();
+await loadStudents();
+renderClassOverview();
+renderClassStudentsTab("students");
+renderClassStudentsTab("debt");
+renderClassStudentsTab("complete");
+loadDashboard();
+loadFeeStudentOptions();
+}
+
+/* EXPORT (class scoped) */
+function exportClassStudents(type){
+let list=allStudents.filter(s=>s.classId===currentClassId);
+
+if(type==="debt")list=list.filter(s=>!isStudentComplete(s));
+if(type==="complete")list=list.filter(s=>isStudentComplete(s));
+
+if(!list.length){alert("Hakuna wanafunzi wa ku-export.");return}
+
+const reqMap={};
+list.forEach(function(s){(s.requirements||[]).forEach(function(r){reqMap[r.id]=r.name})});
+
+const headers=["Jina","Admission","Combination"];
+Object.keys(reqMap).forEach(function(id){headers.push(reqMap[id])});
+headers.push("Hali");
+
+const rows=[headers];
+list.forEach(function(s){
+const row=[s.name||"",s.admission||"",s.combinationName||""];
+Object.keys(reqMap).forEach(function(id){
+const ok=(s.status||{})[id]===true;
+row.push(ok?"✓":"✗");
+});
+row.push(isStudentComplete(s)?"Amekamilisha":"Anadaiwa");
+rows.push(row);
+});
+
+const csv=rows.map(function(row){
+return row.map(function(value){return '"'+String(value).replace(/"/g,'""')+'"'}).join(",");
+}).join("\n");
+
+const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8;"});
+const url=URL.createObjectURL(blob);
+const a=document.createElement("a");
+const cls=allClasses.find(c=>c.id===currentClassId);
+a.href=url;
+a.download="shulesmart-"+(cls?cls.name.replace(/\s+/g,"_"):"darasa")+".csv";
+a.click();
+URL.revokeObjectURL(url);
+}
+
+/* DASHBOARD CLASS GRID */
+function renderDashboardClassGrid(){
+const grid=$("dashboardClassGrid");
+if(!grid)return;
+grid.innerHTML="";
+allClasses.forEach(function(c){
+const div=document.createElement("div");
+div.className="classCard";
+div.innerHTML=`<h3>${c.name}</h3><span>${c.type==="A"?"A-Level":"O-Level"}</span>`;
+div.onclick=function(){
+showPage("classes");
+openClass(c.id);
+};
+grid.appendChild(div);
+});
+}
+
+/* FEES */
+function loadFeeStudentOptions(){
+const select=$("feeStudentSelect");
+if(!select)return;
+select.innerHTML='<option value="">Chagua mwanafunzi</option>';
+allStudents.forEach(function(s){
+const o=document.createElement("option");
+o.value=s.id;
+o.textContent=s.name+(s.admission?" - "+s.admission:"")+(s.className?" ("+s.className+")":"");
+select.appendChild(o);
+});
+}
+
+async function addFee(){
+const studentId=$("feeStudentSelect").value;
+const amount=Number($("feeAmount").value);
+const description=$("feeDescription").value.trim();
+const msg=$("feeMsg");
+if(!studentId||!amount){msg.textContent="Chagua mwanafunzi na weka kiasi.";return}
+const student=allStudents.find(s=>s.id===studentId);
+try{
+await db.collection("users").doc(currentUser.uid).collection("fees").add({
+studentId:studentId,student:student?student.name:"",amount:amount,description:description,
+createdAt:firebase.firestore.FieldValue.serverTimestamp()
+});
+$("feeStudentSelect").value="";
+$("feeAmount").value="";
+$("feeDescription").value="";
+msg.style.color="#16833f";
+msg.textContent="Malipo yamehifadhiwa.";
+loadFees();
+loadDashboard();
+}catch(error){
+msg.style.color="#c62828";
+msg.textContent=error.message;
+}
+}
+
+async function loadFees(){
+if(!currentUser)return;
+allFees=[];
+const table=$("feeTable");
+table.innerHTML="";
+try{
+const snap=await db.collection("users").doc(currentUser.uid).collection("fees").orderBy("createdAt","desc").get();
+snap.forEach(function(doc){
+const d=doc.data();
+allFees.push(d);
+const row=document.createElement("tr");
+const a=document.createElement("td");
+a.textContent=d.student||"";
+const b=document.createElement("td");
+b.textContent=Number(d.amount||0).toLocaleString();
+const c=document.createElement("td");
+c.textContent=d.description||"";
+row.appendChild(a);
+row.appendChild(b);
+row.appendChild(c);
+table.appendChild(row);
+});
+}catch(error){console.error(error)}
+}
+
+/* DASHBOARD */
+async function loadDashboard(){
+if(!currentUser)return;
+try{
+const base=db.collection("users").doc(currentUser.uid);
+
+const classes=await base.collection("classes").get();
+const combos=await base.collection("combinations").get();
+const students=await base.collection("students").get();
+const fees=await base.collection("fees").get();
+
+$("classCount").textContent=classes.size;
+$("comboCount").textContent=combos.size;
+$("studentCount").textContent=students.size;
+
+let debt=0;
+let complete=0;
+let owed=0;
+
+students.forEach(function(doc){
+const s=doc.data();
+if(isStudentComplete(s)){
+complete++;
+}else{
+debt++;
+(s.requirements||[]).forEach(function(r){
+const done=(s.status||{})[r.id]===true;
+if(!done)owed+=Number(r.amount||0);
+});
+}
+});
+
+let collected=0;
+fees.forEach(function(doc){collected+=Number(doc.data().amount||0)});
+
+$("debtorCount").textContent=debt;
+$("completeCount").textContent=complete;
+$("feesCollected").textContent=collected.toLocaleString();
+$("feesOwed").textContent=owed.toLocaleString();
+
+}catch(error){
+console.error(error);
+}
+}
+
+/* USER DATA */
+async function loadUserData(user){
+if(!user)return;
+try{
+const doc=await db.collection("users").doc(user.uid).get();
+if(!doc.exists)return;
+currentUserData=doc.data();
+
+$("schoolTitle").textContent=currentUserData.schoolName||"SHULESMART";
+$("userTitle").textContent="Username: "+(currentUserData.username||"");
+
+$("settingsSchool").value=currentUserData.schoolName||"";
+$("settingsUsername").value=currentUserData.username||"";
+$("settingsEmail").value=currentUserData.email||"";
+$("settingsPhone").value=currentUserData.phone||"";
+
+if(currentUserData.logoData){displayLogo(currentUserData.logoData)}else{hideLogo()}
+
+loadDashboard();
+
+}catch(error){console.error(error)}
+}
+
+/* SETTINGS */
+async function saveSettings(){
+const school=$("settingsSchool").value.trim();
+const username=$("settingsUsername").value.trim();
+const email=$("settingsEmail").value.trim();
+const phone=$("settingsPhone").value.trim();
+const msg=$("settingsMsg");
+
+if(!school||!username||!email||!phone){msg.textContent="Jaza taarifa zote.";return}
+
+try{
+const oldUsername=currentUserData.username||"";
+
+if(username.toLowerCase()!==oldUsername.toLowerCase()){
+const check=await db.collection("usernames").doc(username.toLowerCase()).get();
+if(check.exists){msg.textContent="Username hiyo tayari ipo.";return}
+
+const batch=db.batch();
+batch.delete(db.collection("usernames").doc(oldUsername.toLowerCase()));
+batch.set(db.collection("usernames").doc(username.toLowerCase()),{uid:currentUser.uid,email:email});
+await batch.commit();
+}
+
+await db.collection("users").doc(currentUser.uid).update({
+schoolName:school,username:username,email:email,phone:phone
+});
+
+currentUserData.schoolName=school;
+currentUserData.username=username;
+currentUserData.email=email;
+currentUserData.phone=phone;
+
+$("schoolTitle").textContent=school;
+$("userTitle").textContent="Username: "+username;
+
+msg.style.color="#16833f";
+msg.textContent="Mabadiliko yamehifadhiwa.";
+
+}catch(error){
+msg.style.color="#c62828";
+msg.textContent=error.message;
+}
+}
+
+/* LOGO */
+function uploadLogo(event){
+const file=event.target.files[0];
+if(!file)return;
+if(!file.type.startsWith("image/")){alert("Chagua picha.");return}
+
+const reader=new FileReader();
+reader.onload=function(e){
+const imageData=e.target.result;
+const img=new Image();
+img.onload=async function(){
+const canvas=document.createElement("canvas");
+const max=500;
+let width=img.width;
+let height=img.height;
+if(width>height){if(width>max){height=height*max/width;width=max}}
+else{if(height>max){width=width*max/height;height=max}}
+canvas.width=width;
+canvas.height=height;
+const ctx=canvas.getContext("2d");
+ctx.drawImage(img,0,0,width,height);
+const compressed=canvas.toDataURL("image/jpeg",0.75);
+try{
+await db.collection("users").doc(currentUser.uid).update({logoData:compressed});
+displayLogo(compressed);
+$("logoMsg").style.color="#16833f";
+$("logoMsg").textContent="Nembo imebadilishwa.";
+}catch(error){
+$("logoMsg").style.color="#c62828";
+$("logoMsg").textContent=error.message;
+}
+};
+img.src=imageData;
+};
+reader.readAsDataURL(file);
+}
+
+function displayLogo(data){
+$("schoolLogo").src=data;
+$("schoolLogo").classList.remove("hidden");
+$("logoPlaceholder").classList.add("hidden");
+$("topSchoolLogo").src=data;
+$("topSchoolLogo").classList.remove("hidden");
+}
+
+function hideLogo(){
+$("schoolLogo").classList.add("hidden");
+$("logoPlaceholder").classList.remove("hidden");
+$("topSchoolLogo").classList.add("hidden");
+}
+
+async function deleteLogo(){
+if(!confirm("Una uhakika unataka kufuta nembo?"))return;
+try{
+await db.collection("users").doc(currentUser.uid).update({logoData:""});
+hideLogo();
+$("logoMsg").style.color="#16833f";
+$("logoMsg").textContent="Nembo imefutwa.";
+}catch(error){
+$("logoMsg").style.color="#c62828";
+$("logoMsg").textContent=error.message;
+}
+}
+
+/* CHANGE PASSWORD (requires current password) */
+async function changePassword(){
+const current=$("currentPassword").value;
+const password=$("newPassword").value;
+const msg=$("passwordMsg");
+
+if(!current){msg.textContent="Weka password ya sasa.";return}
+if(password.length<6){msg.textContent="Password mpya iwe angalau characters 6.";return}
+
+try{
+const cred=firebase.auth.EmailAuthProvider.credential(currentUser.email,current);
+await currentUser.reauthenticateWithCredential(cred);
+await currentUser.updatePassword(password);
+
+$("currentPassword").value="";
+$("newPassword").value="";
+
+msg.style.color="#16833f";
+msg.textContent="Password imebadilishwa.";
+
+}catch(error){
+msg.style.color="#c62828";
+if(error.code==="auth/wrong-password"){
+msg.textContent="Password ya sasa si sahihi.";
+}else{
+msg.textContent=error.message;
+}
+}
+}
+
+/* ONLINE / OFFLINE */
+function updateConnection(){
+const status=$("connectionStatus");
+if(navigator.onLine){
+status.textContent="🟢 Online";
+status.style.color="#16833f";
+}else{
+status.textContent="🟠 Offline - taarifa zitasync internet ikirudi";
+status.style.color="#c47a00";
+}
+}
+window.addEventListener("online",updateConnection);
+window.addEventListener("offline",updateConnection);
+
+/* AUTH STATE */
+auth.onAuthStateChanged(async function(user){
+currentUser=user;
+
+if(user){
+
+let doc;
+try{doc=await db.collection("users").doc(user.uid).get()}catch(error){console.error(error);return}
+if(!doc.exists)return;
+
+const userData=doc.data();
+
+if(!userData.trialStart){
+await db.collection("users").doc(user.uid).update({
+trialStart:firebase.firestore.FieldValue.serverTimestamp(),
+subscriptionStatus:userData.subscriptionStatus||"trial"
+});
+userData.trialStart={toMillis:function(){return Date.now()}};
+}
+
+const info=getTrialInfo(userData);
+
+if(info.expired){showLockScreen();return}
+
+$("languageSection").classList.add("hidden");
+$("choiceSection").classList.add("hidden");
+$("authSection").classList.add("hidden");
+$("lockSection").classList.add("hidden");
+$("appSection").classList.remove("hidden");
+
+updateConnection();
+
+await loadUserData(user);
+updateTrialBanner(info);
+
+await loadClasses();
+await loadCombinations();
+await loadStudents();
+
+renderDashboardClassGrid();
+showPage("dashboard");
+
+}else{
+
+$("appSection").classList.add("hidden");
+$("authSection").classList.add("hidden");
+$("lockSection").classList.add("hidden");
+$("languageSection").classList.remove("hidden");
+$("choiceSection").classList.add("hidden");
+
+}
+});
+
+/* DEFAULT LANGUAGE */
+$("language").value="sw";
+changeLanguage();
+
+</script>
+</body>
+  </html>
