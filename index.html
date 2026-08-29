@@ -4,196 +4,241 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SHULESMART</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+:root{
+--bg:#F5F3FF;
+--surface:#FFFFFF;
+--ink:#1E1B4B;
+--muted:#6B6394;
+--primary:#4F46E5;
+--primary-dark:#3730A3;
+--accent:#FF6B35;
+--accent2:#FFC145;
+--success:#10B981;
+--danger:#EF4444;
+--warning:#F59E0B;
+--grad-hero:linear-gradient(135deg,#4F46E5 0%,#7C3AED 50%,#FF6B35 100%);
+--grad-primary-btn:linear-gradient(135deg,#4F46E5,#7C3AED);
+--grad-accent-btn:linear-gradient(135deg,#FF6B35,#FFC145);
+--grad-p:linear-gradient(135deg,#10B981,#34D399);
+--grad-o:linear-gradient(135deg,#4F46E5,#7C3AED);
+--grad-a:linear-gradient(135deg,#FF6B35,#FFC145);
+}
+
 *{box-sizing:border-box;margin:0;padding:0}
 
 body{
-font-family:Arial,sans-serif;
-background:#f4f7fb;
-color:#172033;
+font-family:'Inter',Arial,sans-serif;
+background:var(--bg);
+color:var(--ink);
 }
+
+h1,h2,h3,button{font-family:'Poppins','Inter',Arial,sans-serif}
 
 button,input,select{font:inherit}
 button{cursor:pointer}
 
 .header{
-background:#fff;
+background:var(--grad-hero);
 text-align:center;
-padding:28px 15px 20px;
-border-bottom:1px solid #ddd;
+padding:26px 15px 22px;
+color:#fff;
 }
 
 .logoBox{
-width:90px;
-height:90px;
-margin:auto;
-border-radius:50%;
-overflow:hidden;
-border:2px solid #315efb;
-display:flex;
-align-items:center;
-justify-content:center;
-background:#eef2ff;
+width:82px;height:82px;margin:auto;border-radius:50%;overflow:hidden;
+border:3px solid rgba(255,255,255,.85);
+display:flex;align-items:center;justify-content:center;
+background:rgba(255,255,255,.18);
+backdrop-filter:blur(2px);
 }
-
 .logoBox img{width:100%;height:100%;object-fit:cover}
-.logoPlaceholder{font-size:13px;font-weight:bold}
+.logoPlaceholder{font-size:13px;font-weight:800;color:#fff}
 
-.header h1{margin-top:12px;font-size:28px;letter-spacing:1px}
-.header p{font-size:13px;font-weight:bold;letter-spacing:2px;margin-top:5px;color:#667085}
+.header h1{margin-top:12px;font-size:26px;font-weight:800;letter-spacing:.5px}
+.header p{font-size:12px;font-weight:700;letter-spacing:2px;margin-top:4px;color:rgba(255,255,255,.85)}
 
-.container{width:min(1100px,94%);margin:25px auto}
+.container{width:min(1100px,94%);margin:22px auto}
 
 .card{
-background:#fff;
-border-radius:15px;
+background:var(--surface);
+border-radius:18px;
 padding:22px;
-margin-bottom:20px;
-box-shadow:0 4px 18px rgba(0,0,0,.07);
+margin-bottom:18px;
+box-shadow:0 6px 20px rgba(79,70,229,.08);
+border:1px solid #ECE9FB;
 }
 
-.authCard{max-width:590px;margin:35px auto}
+.authCard{max-width:590px;margin:30px auto}
 
-h2{margin-bottom:18px}
+h2{margin-bottom:16px;color:var(--ink);font-weight:700}
 
-label{display:block;font-size:14px;font-weight:bold;margin-top:12px}
+label{display:block;font-size:13px;font-weight:700;margin-top:12px;color:var(--muted)}
 
 input,select{
 width:100%;
 padding:13px;
 margin-top:6px;
-margin-bottom:10px;
-border:1px solid #ccd3df;
-border-radius:8px;
+margin-bottom:8px;
+border:1.5px solid #E1DCFB;
+border-radius:10px;
 outline:none;
-background:#fff;
+background:#FBFAFF;
+color:var(--ink);
 }
-
-input:focus,select:focus{border-color:#315efb}
+input:focus,select:focus{border-color:var(--primary);background:#fff}
 
 .primary{
-width:100%;
-padding:14px;
-border:0;
-border-radius:8px;
-background:#315efb;
-color:white;
-font-weight:bold;
-margin-top:7px;
+width:100%;padding:14px;border:0;border-radius:12px;
+background:var(--grad-primary-btn);
+color:white;font-weight:700;margin-top:8px;
+box-shadow:0 6px 16px rgba(79,70,229,.35);
 }
 
 .secondary{
-width:100%;
-padding:12px;
-border:1px solid #ccd3df;
-border-radius:8px;
-background:white;
-margin-top:8px;
+width:100%;padding:12px;border:1.5px solid #E1DCFB;border-radius:10px;
+background:#fff;color:var(--primary);font-weight:700;margin-top:8px;
 }
 
-.danger{padding:8px 12px;border:0;border-radius:7px;background:#c62828;color:#fff}
-.success{padding:8px 12px;border:0;border-radius:7px;background:#16833f;color:#fff}
-.neutral{padding:8px 12px;border:0;border-radius:7px;background:#eef2f7;color:#172033}
+.danger{padding:9px 13px;border:0;border-radius:9px;background:var(--danger);color:#fff;font-weight:700}
+.success{padding:9px 13px;border:0;border-radius:9px;background:var(--success);color:#fff;font-weight:700}
+.neutral{padding:9px 13px;border:0;border-radius:9px;background:#EEF0FB;color:var(--ink);font-weight:700}
 
-.links{text-align:center;margin-top:15px}
-.linkButton{border:0;background:none;color:#315efb;margin:5px}
+.links{text-align:center;margin-top:14px}
+.linkButton{border:0;background:none;color:var(--primary);margin:5px;font-weight:700}
 
-.message{font-size:14px;margin-top:12px;line-height:1.5}
-.small{font-size:13px;color:#667085}
+.message{font-size:14px;margin-top:12px;line-height:1.5;font-weight:600}
+.small{font-size:13px;color:var(--muted)}
 .hidden{display:none!important}
 
 .password{position:relative}
 .password input{padding-right:80px}
 .password button{
-position:absolute;right:6px;top:6px;padding:7px 10px;border:0;border-radius:6px;background:#eef2f7;
+position:absolute;right:6px;top:12px;padding:7px 10px;border:0;border-radius:8px;
+background:#EEF0FB;color:var(--primary);font-weight:700;
 }
 
 .choice{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
-.choice button{padding:15px;border:0;border-radius:9px;background:#315efb;color:#fff;font-weight:bold}
+.choice button{
+padding:16px;border:0;border-radius:14px;background:var(--grad-primary-btn);color:#fff;
+font-weight:700;box-shadow:0 6px 16px rgba(79,70,229,.3);
+}
 
-.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:18px}
-.logout{padding:10px 15px;border:0;border-radius:8px;background:#c62828;color:white;font-weight:bold}
+.topbar{
+display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;
+background:var(--grad-hero);padding:16px 18px;border-radius:16px;color:#fff;
+}
+.schoolHeading{display:flex;align-items:center;gap:10px}
+.schoolHeading h2{color:#fff;font-size:19px;margin:0}
 
-.nav{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
-.nav button{padding:11px 5px;border:1px solid #d6dce5;border-radius:8px;background:#fff}
-.nav button.active{background:#315efb;color:#fff}
+.menuDots{
+background:rgba(255,255,255,.2);border:0;color:#fff;font-size:20px;font-weight:900;
+width:40px;height:40px;border-radius:50%;line-height:1;
+}
+.topMenuWrap{position:relative}
+.topMenuPanel{
+position:absolute;right:0;top:48px;background:#fff;border-radius:14px;padding:14px;
+width:230px;box-shadow:0 12px 30px rgba(30,27,75,.25);z-index:50;
+}
+.topMenuPanel .logout{width:100%}
+.topMenuPanel .secondary{width:100%}
+
+.logout{padding:11px 15px;border:0;border-radius:10px;background:var(--danger);color:white;font-weight:700}
+
+.nav{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}
+.nav button{padding:12px 5px;border:1.5px solid #E1DCFB;border-radius:12px;background:#fff;font-weight:700;color:var(--ink)}
+.nav button.active{background:var(--grad-primary-btn);color:#fff;border-color:transparent}
 
 .subnav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
-.subnav button{padding:9px 14px;border:1px solid #d6dce5;border-radius:20px;background:#fff;font-size:13px}
-.subnav button.active{background:#172033;color:#fff;border-color:#172033}
+.subnav button{padding:9px 15px;border:1.5px solid #E1DCFB;border-radius:22px;background:#fff;font-size:13px;font-weight:700;color:var(--ink)}
+.subnav button.active{background:var(--ink);color:#fff;border-color:var(--ink)}
 
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
-.stat{background:#fff;padding:20px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,.06)}
-.stat strong{display:block;font-size:24px;margin-top:8px}
-
-.classGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
-.classCard{
-background:#fff;
-border:1px solid #e5e9f0;
-border-radius:12px;
-padding:16px;
-cursor:pointer;
-transition:.15s;
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.stat{
+background:#fff;padding:18px;border-radius:14px;box-shadow:0 6px 16px rgba(79,70,229,.08);
+border-top:4px solid var(--primary);
 }
-.classCard:hover{border-color:#315efb}
-.classCard h3{font-size:17px;margin-bottom:6px}
-.classCard span{font-size:12px;color:#667085}
+.stat:nth-child(2){border-top-color:var(--accent)}
+.stat:nth-child(3){border-top-color:var(--success)}
+.stat:nth-child(4){border-top-color:var(--danger)}
+.stat:nth-child(5){border-top-color:var(--success)}
+.stat:nth-child(6){border-top-color:var(--accent2)}
+.stat:nth-child(7){border-top-color:var(--warning)}
+.stat span{font-size:12px;font-weight:700;color:var(--muted)}
+.stat strong{display:block;font-size:23px;margin-top:6px;color:var(--ink)}
+
+.classGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+.classCard{
+border-radius:16px;padding:18px;cursor:pointer;color:#fff;
+box-shadow:0 8px 20px rgba(30,27,75,.15);transition:.15s;
+}
+.classCard:active{transform:scale(.98)}
+.classCard.lvl-P{background:var(--grad-p)}
+.classCard.lvl-O{background:var(--grad-o)}
+.classCard.lvl-A{background:var(--grad-a)}
+.classCard h3{font-size:17px;margin-bottom:4px}
+.classCard span{font-size:11px;font-weight:700;background:rgba(255,255,255,.25);padding:3px 9px;border-radius:20px}
 
 .tableWrap{overflow-x:auto;width:100%}
-table{width:100%;border-collapse:collapse;margin-top:15px;min-width:700px}
-th,td{padding:10px;border-bottom:1px solid #e5e9f0;text-align:left;white-space:nowrap}
-th{background:#f7f9fc}
+table{width:100%;border-collapse:collapse;margin-top:12px;min-width:700px}
+th,td{padding:10px;border-bottom:1px solid #EEECFB;text-align:left;white-space:nowrap;font-size:14px}
+th{background:#F7F5FF;color:var(--muted);font-weight:700}
 
-.checkYes{color:#16833f;font-weight:bold;font-size:18px}
-.checkNo{color:#c62828;font-weight:bold;font-size:18px}
+.checkYes{color:var(--success);font-weight:800}
+.checkNo{color:var(--danger);font-weight:800}
 
 .filters{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 
-.requirementRow{
-display:grid;grid-template-columns:1fr 120px auto;gap:8px;align-items:center;margin-bottom:8px;
-}
+.requirementRow{display:grid;grid-template-columns:1fr 120px auto;gap:8px;align-items:center;margin-bottom:8px}
 .requirementRow input{margin:0}
 
-.reqCheck{display:flex;align-items:center;gap:8px;padding:8px 0}
-.reqCheck input{width:auto;margin:0}
+.reqCheck{display:flex;align-items:center;gap:10px;padding:8px 0}
 
-.badge{display:inline-block;padding:4px 8px;border-radius:20px;font-size:12px;font-weight:bold}
-.badgeYes{background:#e8f7ee;color:#16833f}
-.badgeNo{background:#fdecec;color:#c62828}
+.badge{display:inline-block;padding:5px 10px;border-radius:20px;font-size:12px;font-weight:800}
+.badgeYes{background:#DEFBEE;color:#0A7B4B}
+.badgeNo{background:#FEE5E2;color:#C0301F}
 
 .logoUpload{
-padding:12px;background:#eef2ff;border-radius:8px;text-align:center;color:#315efb;font-weight:bold;
-cursor:pointer;display:block;margin-top:10px;
+padding:13px;background:#EEF0FB;border-radius:10px;text-align:center;color:var(--primary);
+font-weight:700;cursor:pointer;display:block;margin-top:10px;
 }
 #logoInput{display:none}
 
 .schoolLogoSmall{
-width:55px;height:55px;border-radius:50%;object-fit:cover;border:2px solid #315efb;
-vertical-align:middle;margin-right:10px;
+width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.8);
+vertical-align:middle;
 }
-.schoolHeading{display:flex;align-items:center;gap:10px}
-.onlineStatus{font-size:12px;font-weight:bold;margin-top:5px}
+
+.onlineStatus{font-size:12px;font-weight:700;margin-bottom:6px}
 
 .exportBox{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.exportBox button{padding:10px 13px;border:1px solid #ccd3df;border-radius:8px;background:#fff}
+.exportBox button{padding:10px 14px;border:1.5px solid #E1DCFB;border-radius:10px;background:#fff;font-weight:700;color:var(--primary)}
 
-.trialBanner{padding:10px 14px;border-radius:8px;font-size:13px;font-weight:bold;margin-top:8px;display:inline-block}
-.trialActive{background:#fff4e0;color:#9a6400}
-.trialOk{background:#e8f7ee;color:#16833f}
+.trialBanner{padding:6px 0;font-size:13px;font-weight:800;display:block}
+.trialActive{color:#FFE9A8}
+.trialOk{color:#B9FBD8}
 
-.lockScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.lockScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--grad-hero)}
 .lockCard{
-background:#fff;border-radius:16px;padding:35px 25px;max-width:480px;width:100%;text-align:center;
-box-shadow:0 8px 30px rgba(0,0,0,.12);
+background:#fff;border-radius:20px;padding:34px 24px;max-width:480px;width:100%;text-align:center;
+box-shadow:0 20px 50px rgba(0,0,0,.25);
 }
-.lockCard .icon{font-size:48px;margin-bottom:10px}
-.lockCard h2{color:#c62828;margin-bottom:14px}
+.lockCard .icon{font-size:46px;margin-bottom:8px}
+.lockCard h2{color:var(--danger);margin-bottom:12px}
 .lockCard p{font-size:14px;line-height:1.7;color:#344054;margin-bottom:10px}
-.lockCard .contactBox{background:#f4f7fb;border-radius:10px;padding:15px;margin-top:18px;text-align:left;font-size:14px}
+.lockCard .priceTag{
+display:inline-block;background:var(--grad-accent-btn);color:#fff;font-weight:800;
+padding:8px 18px;border-radius:20px;margin:8px 0 4px;font-size:15px;
+}
+.lockCard .contactBox{background:#F7F5FF;border-radius:12px;padding:15px;margin-top:16px;text-align:left;font-size:14px}
 .lockCard .contactBox strong{display:block;margin-bottom:6px}
 
-.backBtn{
-border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;padding:0;font-size:14px;
+.backBtn{border:0;background:none;color:var(--primary);font-weight:700;margin-bottom:14px;padding:0;font-size:14px}
+
+.searchResultCard{
+background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;border:1.5px solid #ECE9FB;
 }
 
 @media(max-width:800px){
@@ -202,12 +247,11 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 .filters{grid-template-columns:1fr}
 .classGrid{grid-template-columns:1fr 1fr}
 }
-
 @media(max-width:600px){
 .grid{grid-template-columns:1fr}
 .choice{grid-template-columns:1fr}
 .classGrid{grid-template-columns:1fr}
-.topbar{flex-direction:column;align-items:flex-start}
+.topbar{flex-wrap:wrap}
 }
 </style>
 </head>
@@ -218,8 +262,8 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 <img id="schoolLogo" class="hidden">
 <span id="logoPlaceholder" class="logoPlaceholder">SS</span>
 </div>
-<h1>SHULESMART</h1>
-<p>BY LATTECH</p>
+<h1 id="brandTitle">SHULESMART</h1>
+<p id="brandTag">BY LATTECH</p>
 </header>
 
 <div class="container">
@@ -245,7 +289,7 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 <button onclick="showLogin()"><span data-sw="INGIA" data-en="LOGIN">INGIA</span></button>
 <button onclick="showRegister()"><span data-sw="FUNGUA ACCOUNT MPYA" data-en="CREATE NEW ACCOUNT">FUNGUA ACCOUNT MPYA</span></button>
 </div>
-<p class="small" style="margin-top:16px" data-sw="Utapata dakika 10 za majaribio bila malipo ukifungua account mpya." data-en="You get 10 minutes free trial when you create a new account.">Utapata dakika 10 za majaribio bila malipo ukifungua account mpya.</p>
+<p class="small" style="margin-top:16px" data-sw="Utapata siku 7 za majaribio bila malipo ukifungua account mpya." data-en="You get 7 days free trial when you create a new account.">Utapata siku 7 za majaribio bila malipo ukifungua account mpya.</p>
 </div>
 </section>
 
@@ -271,7 +315,7 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 
 <div id="registerBox" class="card authCard hidden">
 <h2 data-sw="Fungua Account" data-en="Create Account">Fungua Account</h2>
-<p class="small" data-sw="Utapata dakika 10 za kutumia mfumo bure kuanzia sasa." data-en="You will get 10 minutes to use the system free starting now.">Utapata dakika 10 za kutumia mfumo bure kuanzia sasa.</p>
+<p class="small" data-sw="Utapata siku 7 za kutumia mfumo bure kuanzia leo." data-en="You will get 7 days to use the system free starting today.">Utapata siku 7 za kutumia mfumo bure kuanzia leo.</p>
 <label data-sw="Jina la shule" data-en="School name">Jina la shule</label>
 <input id="registerSchool" type="text">
 <label data-sw="Username" data-en="Username">Username</label>
@@ -316,13 +360,14 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 <div class="lockCard">
 <div class="icon">🔒</div>
 <h2 data-sw="Muda wa Majaribio Umeisha" data-en="Trial Period Ended">Muda wa Majaribio Umeisha</h2>
-<p data-sw="Dakika 10 za majaribio ya bure ya SHULESMART zimekwisha. Ili kuendelea kutumia mfumo, tafadhali lipia subscription." data-en="Your 10 minute free trial of SHULESMART has ended. To continue using the system, please pay for a subscription.">Dakika 5 za majaribio ya bure ya SHULESMART zimekwisha. Ili kuendelea kutumia mfumo, tafadhali lipia subscription.</p>
+<p data-sw="Siku 7 za majaribio ya bure ya SHULESMART zimekwisha. Ili kuendelea kutumia mfumo, tafadhali lipia subscription." data-en="Your 7 day free trial of SHULESMART has ended. To continue using the system, please pay for a subscription.">Siku 7 za majaribio ya bure ya SHULESMART zimekwisha. Ili kuendelea kutumia mfumo, tafadhali lipia subscription.</p>
+<div class="priceTag">TSh 10,000 / mwezi</div>
 <div class="contactBox">
 <strong data-sw="Wasiliana ili kulipia:" data-en="Contact to subscribe:">Wasiliana ili kulipia:</strong>
 <span data-sw="Piga simu au tuma ujumbe kwa msimamizi wa SHULESMART kulipia na kufungua account yako." data-en="Call or message the SHULESMART admin to pay and unlock your account.">Piga simu au tuma ujumbe kwa msimamizi wa SHULESMART kulipia na kufungua account yako.</span>
 </div>
 <a href="https://wa.me/255744128348?text=Nataka%20kulipia%20SHULESMART" target="_blank" style="text-decoration:none">
-<button class="primary" style="margin-top:14px;background:#25D366">
+<button class="primary" style="margin-top:14px;background:#25D366;box-shadow:0 6px 16px rgba(37,211,102,.35)">
 <span data-sw="WASILIANA KWA WHATSAPP" data-en="CONTACT VIA WHATSAPP">WASILIANA KWA WHATSAPP</span>
 </button>
 </a>
@@ -342,19 +387,18 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 <img id="topSchoolLogo" class="schoolLogoSmall hidden">
 <div>
 <h2 id="schoolTitle">SHULESMART</h2>
-<p id="userTitle" class="small"></p>
-<p id="connectionStatus" class="onlineStatus"></p>
 <p id="trialBannerText" class="trialBanner hidden"></p>
 </div>
 </div>
-<button class="logout" onclick="logout()">LOGOUT</button>
+<div class="topMenuWrap">
+<button class="menuDots" onclick="toggleTopMenu()">&#8942;</button>
+<div id="topMenuPanel" class="topMenuPanel hidden">
+<button class="secondary" onclick="navigateTo('dashboard')" data-sw="Dashboard" data-en="Dashboard">Dashboard</button>
+<button class="secondary" style="margin-top:8px" onclick="navigateTo('classes')" data-sw="Madarasa" data-en="Classes">Madarasa</button>
+<button class="secondary" style="margin-top:8px" onclick="navigateTo('search')" data-sw="Tafuta" data-en="Search">Tafuta</button>
+<button class="secondary" style="margin-top:8px" onclick="navigateTo('users')" data-sw="Settings" data-en="Settings">Settings</button>
 </div>
-
-<div class="nav">
-<button id="navDashboard" class="active" onclick="showPage('dashboard')" data-sw="Dashboard" data-en="Dashboard">Dashboard</button>
-<button id="navClasses" onclick="showPage('classes')" data-sw="Madarasa" data-en="Classes">Madarasa</button>
-<button id="navFees" onclick="showPage('fees')" data-sw="Ada" data-en="Fees">Ada</button>
-<button id="navUsers" onclick="showPage('users')" data-sw="Settings" data-en="Settings">Settings</button>
+</div>
 </div>
 
 <!-- DASHBOARD -->
@@ -369,7 +413,7 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 <div class="stat"><span data-sw="Ada Inayodaiwa" data-en="Fees Owed">Ada Inayodaiwa</span><strong id="feesOwed">0</strong></div>
 </div>
 
-<div class="card" style="margin-top:20px">
+<div class="card" style="margin-top:18px">
 <h3 data-sw="Madarasa Yako" data-en="Your Classes">Madarasa Yako</h3>
 <p class="small" style="margin-top:6px" data-sw="Bonyeza darasa kuingia moja kwa moja." data-en="Tap a class to open it directly.">Bonyeza darasa kuingia moja kwa moja.</p>
 <div id="dashboardClassGrid" class="classGrid"></div>
@@ -379,20 +423,23 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 <!-- CLASSES -->
 <div id="classesPage" class="hidden">
 
-<!-- LIST VIEW -->
 <div id="classListView">
 <div class="card">
 <h2 data-sw="Usajili wa Madarasa" data-en="Class Registration">Usajili wa Madarasa</h2>
-<label data-sw="Jina la darasa" data-en="Class name">Jina la darasa</label>
-<input id="className" placeholder="Mfano: Form V">
 <label data-sw="Kiwango" data-en="Level">Kiwango</label>
-<select id="classType">
+<select id="classType" onchange="classTypeChanged()">
+<option value="P">Primary</option>
 <option value="O">O-Level</option>
 <option value="A">A-Level</option>
 </select>
-<h3 style="margin-top:18px" data-sw="Mahitaji ya darasa (kwa O-Level)" data-en="Class requirements (for O-Level)">Mahitaji ya darasa (kwa O-Level)</h3>
+<label data-sw="Jina la darasa" data-en="Class name">Jina la darasa</label>
+<select id="classNameSelect" onchange="classNameSelectChanged()"></select>
+<input id="classNameCustom" class="hidden" placeholder="Andika jina la darasa">
+<div id="classReqSection">
+<h3 style="margin-top:18px" data-sw="Mahitaji ya darasa" data-en="Class requirements">Mahitaji ya darasa</h3>
 <div id="classRequirements"></div>
 <button class="secondary" onclick="addRequirementRow('classRequirements')" data-sw="+ Ongeza hitaji" data-en="+ Add requirement">Ongeza hitaji</button>
+</div>
 <button class="primary" onclick="saveClass()"><span data-sw="HIFADHI DARASA" data-en="SAVE CLASS">HIFADHI DARASA</span></button>
 <p id="classMsg" class="message"></p>
 </div>
@@ -405,7 +452,6 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 </div>
 </div>
 
-<!-- DETAIL VIEW -->
 <div id="classDetailView" class="hidden">
 <button class="backBtn" onclick="closeClassDetail()">&larr; Rudi kwenye Madarasa</button>
 <h2 id="classDetailTitle" style="margin-bottom:6px"></h2>
@@ -415,11 +461,11 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 <button id="ctabOverview" class="active" onclick="showClassTab('overview')" data-sw="Overview" data-en="Overview">Overview</button>
 <button id="ctabCombos" onclick="showClassTab('combos')" data-sw="Combinations" data-en="Combinations">Combinations</button>
 <button id="ctabStudents" onclick="showClassTab('students')" data-sw="Wanafunzi" data-en="Students">Wanafunzi</button>
+<button id="ctabAda" onclick="showClassTab('ada')" data-sw="Ada" data-en="Fees">Ada</button>
 <button id="ctabDebt" onclick="showClassTab('debt')" data-sw="Wanaodaiwa" data-en="Debtors">Wanaodaiwa</button>
 <button id="ctabComplete" onclick="showClassTab('complete')" data-sw="Wasiodaiwa" data-en="Complete">Wasiodaiwa</button>
 </div>
 
-<!-- OVERVIEW -->
 <div id="classTabOverview">
 <div class="grid">
 <div class="stat"><span data-sw="Wanafunzi" data-en="Students">Wanafunzi</span><strong id="ovStudents">0</strong></div>
@@ -435,7 +481,6 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 </div>
 </div>
 
-<!-- COMBINATIONS -->
 <div id="classTabCombos" class="hidden">
 <div class="card">
 <h2 data-sw="Ongeza Combination" data-en="Add Combination">Ongeza Combination</h2>
@@ -455,7 +500,6 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 </div>
 </div>
 
-<!-- STUDENTS -->
 <div id="classTabStudents" class="hidden">
 <div class="card">
 <h2 data-sw="Sajili Mwanafunzi" data-en="Register Student">Sajili Mwanafunzi</h2>
@@ -487,7 +531,29 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 </div>
 </div>
 
-<!-- DEBTORS -->
+<div id="classTabAda" class="hidden">
+<div class="card">
+<h2 data-sw="Sajili Malipo" data-en="Register Payment">Sajili Malipo</h2>
+<label data-sw="Mwanafunzi" data-en="Student">Mwanafunzi</label>
+<select id="adaStudentSelect" onchange="adaStudentChanged()"><option value="">Chagua mwanafunzi</option></select>
+<div id="adaRequirementBox" class="hidden">
+<label data-sw="Hitaji" data-en="Requirement">Hitaji</label>
+<select id="adaRequirementSelect" onchange="updateAdaReqInfo()"></select>
+<p id="adaReqInfo" class="small"></p>
+</div>
+<label data-sw="Kiasi kilicholetwa sasa" data-en="Amount paid now">Kiasi kilicholetwa sasa</label>
+<input id="adaAmount" type="number">
+<button class="primary" onclick="addAdaPayment()"><span data-sw="HIFADHI MALIPO" data-en="SAVE PAYMENT">HIFADHI MALIPO</span></button>
+<p id="adaMsg" class="message"></p>
+</div>
+<div class="card">
+<h2 data-sw="Malipo ya Hivi Karibuni" data-en="Recent Payments">Malipo ya Hivi Karibuni</h2>
+<div class="tableWrap">
+<table><thead><tr><th>Mwanafunzi</th><th>Hitaji</th><th>Kiasi</th></tr></thead><tbody id="adaTable"></tbody></table>
+</div>
+</div>
+</div>
+
 <div id="classTabDebt" class="hidden">
 <div class="card">
 <h2 data-sw="Wanaodaiwa" data-en="Debtors">Wanaodaiwa</h2>
@@ -498,7 +564,6 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 </div>
 </div>
 
-<!-- COMPLETE -->
 <div id="classTabComplete" class="hidden">
 <div class="card">
 <h2 data-sw="Wasiodaiwa" data-en="Complete">Wasiodaiwa</h2>
@@ -512,26 +577,22 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 </div>
 </div>
 
-<!-- FEES -->
-<div id="feesPage" class="hidden">
+<!-- SEARCH -->
+<div id="searchPage" class="hidden">
 <div class="card">
-<h2 data-sw="Malipo" data-en="Payments">Malipo</h2>
-<label data-sw="Mwanafunzi" data-en="Student">Mwanafunzi</label>
-<select id="feeStudentSelect"></select>
-<label data-sw="Kiasi" data-en="Amount">Kiasi</label>
-<input id="feeAmount" type="number">
-<label data-sw="Maelezo" data-en="Description">Maelezo</label>
-<input id="feeDescription">
-<button class="primary" onclick="addFee()"><span data-sw="HIFADHI MALIPO" data-en="SAVE PAYMENT">HIFADHI MALIPO</span></button>
-<p id="feeMsg" class="message"></p>
-<div class="tableWrap">
-<table><thead><tr><th>Mwanafunzi</th><th>Kiasi</th><th>Maelezo</th></tr></thead><tbody id="feeTable"></tbody></table>
-</div>
+<h2 data-sw="Tafuta Mwanafunzi" data-en="Search Student">Tafuta Mwanafunzi</h2>
+<input id="searchInput" placeholder="Andika jina au admission number..." oninput="performSearch()">
+<div id="searchResults" style="margin-top:14px"></div>
 </div>
 </div>
 
 <!-- SETTINGS -->
 <div id="usersPage" class="hidden">
+
+<div class="card">
+<button class="logout" style="width:100%" onclick="logout()">LOGOUT</button>
+</div>
+
 <div class="card">
 <h2 data-sw="Settings za Shule" data-en="School Settings">Settings za Shule</h2>
 <label data-sw="Jina la shule" data-en="School name">Jina la shule</label>
@@ -549,6 +610,17 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 <div class="card">
 <h2 data-sw="Hali ya Subscription" data-en="Subscription Status">Hali ya Subscription</h2>
 <p id="subStatusText" class="small"></p>
+<p class="small" style="margin-top:8px" data-sw="Bei: TSh 10,000 kwa mwezi." data-en="Price: TSh 10,000 per month.">Bei: TSh 10,000 kwa mwezi.</p>
+</div>
+
+<div class="card">
+<h2 data-sw="Toa Maoni" data-en="Give Feedback">Toa Maoni</h2>
+<p class="small" data-sw="Una wazo la kuboresha SHULESMART? Tuambie." data-en="Have an idea to improve SHULESMART? Tell us.">Una wazo la kuboresha SHULESMART? Tuambie.</p>
+<label data-sw="Maoni yako" data-en="Your feedback">Maoni yako</label>
+<textarea id="feedbackText" rows="4" style="width:100%;padding:13px;margin-top:6px;border:1.5px solid #E1DCFB;border-radius:10px;font-family:inherit"></textarea>
+<button class="primary" style="margin-top:10px;background:#25D366;box-shadow:0 6px 16px rgba(37,211,102,.35)" onclick="sendFeedback()">
+<span data-sw="TUMA MAONI KWA WHATSAPP" data-en="SEND FEEDBACK VIA WHATSAPP">TUMA MAONI KWA WHATSAPP</span>
+</button>
 </div>
 
 <div class="card">
@@ -573,6 +645,16 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 </div>
 <button class="primary" onclick="changePassword()"><span data-sw="BADILISHA PASSWORD" data-en="CHANGE PASSWORD">BADILISHA PASSWORD</span></button>
 <p id="passwordMsg" class="message"></p>
+</div>
+
+<div class="card" style="text-align:center">
+<p class="small" style="font-weight:700;color:var(--ink)">POWERED BY LATTECH</p>
+<p class="small" style="margin-top:6px">📞 0744 128 348 &nbsp; ✉️ Labaniashery242@gmail.com</p>
+<a href="https://wa.me/255744128348?text=Nataka%20msaada%20wa%20SHULESMART" target="_blank" style="text-decoration:none">
+<button class="primary" style="margin-top:12px;background:#25D366;box-shadow:0 6px 16px rgba(37,211,102,.35)">
+<span data-sw="WASILIANA NA DEVELOPER" data-en="CONTACT DEVELOPER">WASILIANA NA DEVELOPER</span>
+</button>
+</a>
 </div>
 </div>
 
@@ -602,17 +684,33 @@ const db=firebase.firestore();
 
 db.enablePersistence({synchronizeTabs:true}).catch(function(e){console.log("Offline persistence:",e.code)});
 
-const TRIAL_MINUTES=10;
+const TRIAL_DAYS=7;
+
+const CLASS_NAME_OPTIONS={
+P:["Darasa la Kwanza","Darasa la Pili","Darasa la Tatu","Darasa la Nne","Darasa la Tano","Darasa la Sita","Darasa la Saba"],
+O:["Form One","Form Two","Form Three","Form Four"],
+A:["Form Five","Form Six"]
+};
 
 let currentUser=null;
 let currentUserData=null;
 let allStudents=[];
 let allClasses=[];
 let allCombinations=[];
-let allFees=[];
 let currentClassId=null;
 
 function $(id){return document.getElementById(id)}
+
+function levelLabel(type){
+if(type==="A")return "A-Level";
+if(type==="P")return "Primary";
+return "O-Level";
+}
+function levelClass(type){
+if(type==="A")return "lvl-A";
+if(type==="P")return "lvl-P";
+return "lvl-O";
+}
 
 /* LANGUAGE */
 function changeLanguage(){
@@ -627,7 +725,6 @@ $("choiceSection").classList.remove("hidden");
 changeLanguage();
 }
 
-/* PASSWORD TOGGLE */
 function togglePassword(id,button){
 const input=$(id);
 if(input.type==="password"){
@@ -639,7 +736,6 @@ button.textContent=$("language").value==="sw"?"Onyesha":"Show";
 }
 }
 
-/* SCREENS */
 function showLogin(){
 $("choiceSection").classList.add("hidden");
 $("authSection").classList.remove("hidden");
@@ -699,7 +795,7 @@ await batch.commit();
 try{await credential.user.sendEmailVerification()}catch(e){console.log(e)}
 
 msg.style.color="#16833f";
-msg.textContent="Account imetengenezwa. Una dakika 10 za majaribio bure.";
+msg.textContent="Account imetengenezwa. Una siku 7 za majaribio bure.";
 
 await enterApp(credential.user);
 
@@ -727,7 +823,6 @@ msg.textContent="Username au password si sahihi.";
 }
 }
 
-/* RECOVERY */
 async function recoverPassword(){
 const email=$("recoveryEmail").value.trim();
 const msg=$("recoveryMsg");
@@ -744,32 +839,29 @@ msg.textContent=error.message;
 
 function logout(){auth.signOut()}
 
-/* TRIAL */
+/* TRIAL / SUBSCRIPTION */
 function getTrialInfo(userData){
 const now=Date.now();
 
-/* Priority 1: subscriptionEndDate - a real end date set by admin (works for any number of months) */
 if(userData.subscriptionEndDate&&userData.subscriptionEndDate.toMillis){
 const endMillis=userData.subscriptionEndDate.toMillis();
 if(endMillis>now){
 const daysLeft=Math.max(1,Math.ceil((endMillis-now)/(1000*60*60*24)));
-return{expired:false,active:true,minutesLeft:null,daysLeft:daysLeft,mode:"paid"};
+return{expired:false,active:true,daysLeft:daysLeft,mode:"paid"};
 }else{
-return{expired:true,active:false,minutesLeft:0,daysLeft:0,mode:"paid_expired"};
+return{expired:true,active:false,daysLeft:0,mode:"paid_expired"};
 }
 }
 
-/* Priority 2: subscriptionStatus="active" with no end date - permanent override (legacy/manual) */
 if(userData.subscriptionStatus==="active"){
-return{expired:false,active:true,minutesLeft:null,daysLeft:null,mode:"active_flag"};
+return{expired:false,active:true,daysLeft:null,mode:"active_flag"};
 }
 
-/* Priority 3: trial countdown */
 let startMillis=now;
 if(userData.trialStart&&userData.trialStart.toMillis){startMillis=userData.trialStart.toMillis()}
-const elapsedMinutes=(now-startMillis)/(1000*60);
-const minutesLeft=Math.max(0,Math.ceil(TRIAL_MINUTES-elapsedMinutes));
-return{expired:elapsedMinutes>=TRIAL_MINUTES,active:false,minutesLeft:minutesLeft,mode:"trial"};
+const elapsedDays=(now-startMillis)/(1000*60*60*24);
+const daysLeft=Math.max(0,Math.ceil(TRIAL_DAYS-elapsedDays));
+return{expired:elapsedDays>=TRIAL_DAYS,active:false,daysLeft:daysLeft,mode:"trial"};
 }
 
 function showLockScreen(){
@@ -801,52 +893,50 @@ function updateTrialBanner(info){
 const el=$("trialBannerText");
 const settingsText=$("subStatusText");
 
+el.classList.remove("hidden");
+
 if(info.active){
 if(info.mode==="paid"){
-el.classList.remove("hidden");
+el.classList.remove("trialActive");
+el.classList.add("trialOk");
 el.textContent="Subscription: siku "+info.daysLeft+" zimebaki";
 if(settingsText){settingsText.textContent="Subscription: Active — siku "+info.daysLeft+" zimebaki.";settingsText.style.color="#16833f"}
 }else{
-el.classList.add("hidden");
-if(settingsText){settingsText.textContent="Subscription: Active ✓ (Umeidhinishwa - hakuna ukomo)";settingsText.style.color="#16833f"}
+el.classList.remove("trialActive");
+el.classList.add("trialOk");
+el.textContent="Subscription: Active ✓";
+if(settingsText){settingsText.textContent="Subscription: Active ✓";settingsText.style.color="#16833f"}
 }
 return;
 }
 
-el.classList.remove("hidden");
 el.classList.remove("trialOk");
 el.classList.add("trialActive");
-el.textContent=$("language").value==="sw"?("Trial: dakika "+info.minutesLeft+" zimebaki"):("Trial: "+info.minutesLeft+" minutes left");
-if(settingsText){settingsText.textContent="Subscription: Trial - dakika "+info.minutesLeft+" zimebaki.";settingsText.style.color="#9a6400"}
+el.textContent="Trial: siku "+info.daysLeft+" zimebaki";
+if(settingsText){settingsText.textContent="Trial - siku "+info.daysLeft+" zimebaki. Lipia TSh 10,000/mwezi kuendelea.";settingsText.style.color="#9a6400"}
 }
 
-/* TOP NAV */
+function toggleTopMenu(){
+$("topMenuPanel").classList.toggle("hidden");
+}
+
+function navigateTo(page){
+showPage(page);
+$("topMenuPanel").classList.add("hidden");
+}
+
+/* PAGE SWITCHING */
 function showPage(page){
-const pages=["dashboard","classes","fees","users"];
+const pages=["dashboard","classes","search","users"];
 pages.forEach(function(name){
 $(name+"Page").classList.add("hidden");
-const nav=$("nav"+name.charAt(0).toUpperCase()+name.slice(1));
-if(nav)nav.classList.remove("active");
 });
 $(page+"Page").classList.remove("hidden");
-const nav=$("nav"+page.charAt(0).toUpperCase()+page.slice(1));
-if(nav)nav.classList.add("active");
 
 if(page==="dashboard")loadDashboard();
-
-if(page==="classes"){
-closeClassDetail();
-loadClasses();
-}
-
-if(page==="fees"){
-loadFees();
-loadFeeStudentOptions();
-}
-
-if(page==="users"){
-loadUserData(currentUser);
-}
+if(page==="classes"){closeClassDetail();loadClasses()}
+if(page==="search"){$("searchInput").value="";$("searchResults").innerHTML=""}
+if(page==="users")loadUserData(currentUser);
 }
 
 /* REQUIREMENTS UI (create) */
@@ -861,7 +951,6 @@ box.innerHTML=`
 box.querySelector("button").onclick=function(){box.remove()};
 $(containerId).appendChild(box);
 }
-
 function getRequirements(containerId){
 const rows=$(containerId).querySelectorAll(".requirementRow");
 const result=[];
@@ -874,8 +963,6 @@ result.push({id:"r_"+Date.now()+"_"+Math.random().toString(36).slice(2,8),name:n
 });
 return result;
 }
-
-/* EDIT REQUIREMENTS (prompt based: edit amount / delete / add) */
 async function editRequirementsFlow(collectionName,docId,requirements){
 let reqs=requirements.slice();
 let i=0;
@@ -903,22 +990,54 @@ await db.collection("users").doc(currentUser.uid).collection(collectionName).doc
 return reqs;
 }
 
+/* CLASS NAME / TYPE SELECTS */
+function classTypeChanged(){
+const type=$("classType").value;
+const nameSelect=$("classNameSelect");
+nameSelect.innerHTML="";
+(CLASS_NAME_OPTIONS[type]||[]).forEach(function(o){
+const el=document.createElement("option");
+el.value=o;el.textContent=o;
+nameSelect.appendChild(el);
+});
+const customOpt=document.createElement("option");
+customOpt.value="__custom__";
+customOpt.textContent="Jaza mwenyewe...";
+nameSelect.appendChild(customOpt);
+classNameSelectChanged();
+
+if(type==="A"){
+$("classReqSection").classList.add("hidden");
+}else{
+$("classReqSection").classList.remove("hidden");
+}
+}
+function classNameSelectChanged(){
+if($("classNameSelect").value==="__custom__"){
+$("classNameCustom").classList.remove("hidden");
+}else{
+$("classNameCustom").classList.add("hidden");
+}
+}
+
 /* SAVE CLASS */
 async function saveClass(){
 if(!currentUser)return;
-const name=$("className").value.trim();
 const type=$("classType").value;
+const nameSel=$("classNameSelect").value;
+const name=nameSel==="__custom__"?$("classNameCustom").value.trim():nameSel;
 const msg=$("classMsg");
-if(!name){msg.textContent="Weka jina la darasa.";return}
-const requirements=getRequirements("classRequirements");
+if(!name){msg.textContent="Chagua au weka jina la darasa.";return}
+const requirements=type==="A"?[]:getRequirements("classRequirements");
 try{
 await db.collection("users").doc(currentUser.uid).collection("classes").add({
 name:name,type:type,requirements:requirements,createdAt:firebase.firestore.FieldValue.serverTimestamp()
 });
-$("className").value="";
+$("classNameCustom").value="";
 $("classRequirements").innerHTML="";
 msg.style.color="#16833f";
 msg.textContent="Darasa limehifadhiwa.";
+classTypeChanged();
 loadClasses();
 }catch(error){
 msg.style.color="#c62828";
@@ -943,7 +1062,7 @@ const c1=document.createElement("td");
 c1.textContent=d.name||"";
 
 const c2=document.createElement("td");
-c2.textContent=d.type==="A"?"A-Level":"O-Level";
+c2.textContent=levelLabel(d.type);
 
 const c3=document.createElement("td");
 
@@ -977,7 +1096,6 @@ table.appendChild(row);
 renderDashboardClassGrid();
 }
 
-/* EDIT CLASS (rename) */
 async function editClass(id){
 const cls=allClasses.find(c=>c.id===id);
 if(!cls)return;
@@ -989,14 +1107,12 @@ loadClasses();
 }catch(error){alert(error.message)}
 }
 
-/* DELETE CLASS */
 async function deleteClass(id){
 if(!confirm("Una uhakika unataka kufuta darasa? Hii pia itafuta combinations zake."))return;
 await db.collection("users").doc(currentUser.uid).collection("classes").doc(id).delete();
 loadClasses();
 loadDashboard();
 }
-
 async function deleteClassFromDetail(){
 if(!currentClassId)return;
 await deleteClass(currentClassId);
@@ -1013,7 +1129,7 @@ $("classListView").classList.add("hidden");
 $("classDetailView").classList.remove("hidden");
 
 $("classDetailTitle").textContent=cls.name;
-$("classDetailType").textContent=cls.type==="A"?"A-Level":"O-Level";
+$("classDetailType").textContent=levelLabel(cls.type);
 
 if(cls.type==="A"){
 $("ctabCombos").classList.remove("hidden");
@@ -1042,7 +1158,7 @@ $("classListView").classList.remove("hidden");
 
 /* CLASS TABS */
 function showClassTab(tab){
-const tabs=["overview","combos","students","debt","complete"];
+const tabs=["overview","combos","students","ada","debt","complete"];
 tabs.forEach(function(t){
 $("classTab"+t.charAt(0).toUpperCase()+t.slice(1)).classList.add("hidden");
 $("ctab"+t.charAt(0).toUpperCase()+t.slice(1)).classList.remove("active");
@@ -1053,6 +1169,7 @@ $("ctab"+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add("active");
 if(tab==="overview")renderClassOverview();
 if(tab==="combos")renderCombosForClass();
 if(tab==="students"){populateComboFilter();renderClassStudentsTab("students")}
+if(tab==="ada"){populateAdaStudentSelect();$("adaRequirementBox").classList.add("hidden");renderAdaTable()}
 if(tab==="debt")renderClassStudentsTab("debt");
 if(tab==="complete")renderClassStudentsTab("complete");
 }
@@ -1090,7 +1207,7 @@ $("classDetailMsg").style.color="#16833f";
 $("classDetailMsg").textContent="Mahitaji yamesasishwa.";
 }
 
-/* COMBINATIONS WITHIN CLASS */
+/* COMBINATIONS */
 async function saveCombination(){
 if(!currentUser||!currentClassId)return;
 const name=$("comboName").value.trim();
@@ -1114,7 +1231,6 @@ msg.style.color="#c62828";
 msg.textContent=error.message;
 }
 }
-
 async function loadCombinations(){
 if(!currentUser)return;
 allCombinations=[];
@@ -1123,17 +1239,14 @@ const snap=await db.collection("users").doc(currentUser.uid).collection("combina
 snap.forEach(function(doc){allCombinations.push({id:doc.id,...doc.data()})});
 }catch(error){console.error(error)}
 }
-
 function renderCombosForClass(){
 const table=$("comboTable");
 table.innerHTML="";
 const list=allCombinations.filter(c=>c.classId===currentClassId);
 list.forEach(function(c){
 const row=document.createElement("tr");
-
 const c1=document.createElement("td");
 c1.textContent=c.name;
-
 const c2=document.createElement("td");
 
 const editBtn=document.createElement("button");
@@ -1157,16 +1270,13 @@ delBtn.onclick=function(){deleteCombo(c.id)};
 c2.appendChild(editBtn);
 c2.appendChild(reqBtn);
 c2.appendChild(delBtn);
-
 row.appendChild(c1);
 row.appendChild(c2);
 table.appendChild(row);
 });
-
 populateComboFilter();
 populateStudentComboSelect();
 }
-
 async function editCombo(id){
 const combo=allCombinations.find(c=>c.id===id);
 if(!combo)return;
@@ -1178,7 +1288,6 @@ await loadCombinations();
 renderCombosForClass();
 }catch(error){alert(error.message)}
 }
-
 async function editComboRequirements(id){
 const combo=allCombinations.find(c=>c.id===id);
 if(!combo)return;
@@ -1186,7 +1295,6 @@ await editRequirementsFlow("combinations",id,combo.requirements||[]);
 await loadCombinations();
 renderCombosForClass();
 }
-
 async function deleteCombo(id){
 if(!confirm("Una uhakika unataka kufuta combination hii?"))return;
 await db.collection("users").doc(currentUser.uid).collection("combinations").doc(id).delete();
@@ -1200,24 +1308,20 @@ const select=$("studentCombination");
 select.innerHTML='<option value="">Chagua combination</option>';
 allCombinations.filter(c=>c.classId===currentClassId).forEach(function(c){
 const o=document.createElement("option");
-o.value=c.id;
-o.textContent=c.name;
+o.value=c.id;o.textContent=c.name;
 select.appendChild(o);
 });
 }
-
 function populateComboFilter(){
 const select=$("classComboFilter");
 if(!select)return;
 select.innerHTML='<option value="">Combination zote</option>';
 allCombinations.filter(c=>c.classId===currentClassId).forEach(function(c){
 const o=document.createElement("option");
-o.value=c.id;
-o.textContent=c.name;
+o.value=c.id;o.textContent=c.name;
 select.appendChild(o);
 });
 }
-
 function showStudentRequirementsFromCombo(){
 const cls=allClasses.find(c=>c.id===currentClassId);
 if(cls&&cls.type==="A"){
@@ -1228,7 +1332,6 @@ showStudentRequirements(combo?combo.requirements||[]:[]);
 showStudentRequirements(cls.requirements||[]);
 }
 }
-
 function showStudentRequirements(requirements){
 const box=$("studentRequirements");
 box.innerHTML="";
@@ -1240,9 +1343,8 @@ requirements.forEach(function(r){
 const div=document.createElement("div");
 div.className="reqCheck";
 div.innerHTML=`
-<input type="checkbox" class="studentReq" data-id="${r.id}" data-name="${r.name}" data-amount="${r.amount||0}">
-<span>${r.name}</span>
-<span class="small">${r.amount?Number(r.amount).toLocaleString():""}</span>
+<span style="flex:1">${r.name} <span class="small">(Inatakiwa: ${r.amount?Number(r.amount).toLocaleString():"-"})</span></span>
+<input type="number" class="studentReqAmt" data-id="${r.id}" placeholder="0" style="width:100px;margin:0">
 `;
 box.appendChild(div);
 });
@@ -1272,8 +1374,8 @@ requirements=cls.requirements||[];
 
 const status={};
 requirements.forEach(function(r){
-const checkbox=document.querySelector('.studentReq[data-id="'+r.id+'"]');
-status[r.id]=checkbox?checkbox.checked:false;
+const input=document.querySelector('.studentReqAmt[data-id="'+r.id+'"]');
+status[r.id]=input?(Number(input.value)||0):0;
 });
 
 try{
@@ -1294,7 +1396,6 @@ msg.textContent="Mwanafunzi ameongezwa.";
 await loadStudents();
 renderClassOverview();
 renderClassStudentsTab("students");
-loadFeeStudentOptions();
 
 }catch(error){
 msg.style.color="#c62828";
@@ -1302,7 +1403,6 @@ msg.textContent=error.message;
 }
 }
 
-/* LOAD ALL STUDENTS (global cache) */
 async function loadStudents(){
 if(!currentUser)return;
 allStudents=[];
@@ -1316,10 +1416,13 @@ function isStudentComplete(student){
 const req=student.requirements||[];
 const status=student.status||{};
 if(!req.length)return true;
-return req.every(function(r){return status[r.id]===true});
+return req.every(function(r){
+const submitted=Number(status[r.id])||0;
+if(Number(r.amount)>0){return submitted>=Number(r.amount)}
+return submitted>0;
+});
 }
 
-/* RENDER CLASS-SCOPED STUDENT TABLES */
 function renderClassStudentsTab(which){
 let list=allStudents.filter(s=>s.classId===currentClassId);
 
@@ -1328,12 +1431,10 @@ const comboFilter=$("classComboFilter")?$("classComboFilter").value:"";
 if(comboFilter)list=list.filter(s=>s.combinationId===comboFilter);
 renderStudentTable(list,"studentsHeadAll","studentsBodyAll");
 }
-
 if(which==="debt"){
 list=list.filter(s=>!isStudentComplete(s));
 renderStudentTable(list,"studentsHeadDebt","studentsBodyDebt");
 }
-
 if(which==="complete"){
 list=list.filter(s=>isStudentComplete(s));
 renderStudentTable(list,"studentsHeadComplete","studentsBodyComplete");
@@ -1347,7 +1448,7 @@ list.forEach(function(s){(s.requirements||[]).forEach(function(r){reqMap[r.id]=r
 const head=$(headId);
 head.innerHTML="";
 const hr=document.createElement("tr");
-["Jina","Admission","Combination"].forEach(function(x){
+["Jina","Admission","Combination","Tarehe ya Usajili"].forEach(function(x){
 const th=document.createElement("th");
 th.textContent=x;
 hr.appendChild(th);
@@ -1380,14 +1481,17 @@ return td;
 row.appendChild(cell(s.name));
 row.appendChild(cell(s.admission));
 row.appendChild(cell(s.combinationName));
+row.appendChild(cell(formatDate(s.createdAt)));
 
 Object.keys(reqMap).forEach(function(id){
 const td=document.createElement("td");
 const found=(s.requirements||[]).find(r=>r.id===id);
 if(found){
-const ok=(s.status||{})[id]===true;
-td.textContent=ok?"✓":"✗";
-td.className=ok?"checkYes":"checkNo";
+const submitted=Number((s.status||{})[id])||0;
+const amt=Number(found.amount)||0;
+const complete=amt>0?submitted>=amt:submitted>0;
+td.textContent=submitted.toLocaleString()+"/"+amt.toLocaleString();
+td.className=complete?"checkYes":"checkNo";
 }
 row.appendChild(td);
 });
@@ -1417,26 +1521,27 @@ body.appendChild(row);
 });
 }
 
-/* EDIT STUDENT */
 async function editStudent(id){
 const student=allStudents.find(s=>s.id===id);
 if(!student)return;
 
 const newName=prompt("Jina la mwanafunzi:",student.name);
 if(newName===null)return;
-
 const newAdmission=prompt("Admission Number (hiari):",student.admission||"");
 if(newAdmission===null)return;
 
 const status=Object.assign({},student.status||{});
-
 (student.requirements||[]).forEach(function(r){
-const current=status[r.id]===true;
-const answer=confirm(
-r.name+" - "+(current?"✓ Kimekamilika":"✗ Hakijakamilika")+
-"\n\nBonyeza OK = Kimekamilika\nCancel = Hakijakamilika"
+const current=Number(status[r.id])||0;
+const answer=prompt(
+r.name+" - Inatakiwa: "+Number(r.amount).toLocaleString()+"\nKilicholetwa sasa: "+current+
+"\n\nWeka kiasi kipya cha jumla kilicholetwa (Cancel = usibadilishe):",
+current
 );
-status[r.id]=answer;
+if(answer!==null){
+const num=Number(answer);
+if(!isNaN(num))status[r.id]=num;
+}
 });
 
 try{
@@ -1444,10 +1549,12 @@ await db.collection("users").doc(currentUser.uid).collection("students").doc(id)
 name:newName.trim(),admission:newAdmission.trim(),status:status
 });
 await loadStudents();
+if(currentClassId){
 renderClassOverview();
 renderClassStudentsTab("students");
 renderClassStudentsTab("debt");
 renderClassStudentsTab("complete");
+}
 loadDashboard();
 }catch(error){
 alert(error.message);
@@ -1458,36 +1565,36 @@ async function deleteStudent(id){
 if(!confirm("Una uhakika unataka kufuta mwanafunzi?"))return;
 await db.collection("users").doc(currentUser.uid).collection("students").doc(id).delete();
 await loadStudents();
+if(currentClassId){
 renderClassOverview();
 renderClassStudentsTab("students");
 renderClassStudentsTab("debt");
 renderClassStudentsTab("complete");
+}
 loadDashboard();
-loadFeeStudentOptions();
 }
 
-/* EXPORT (class scoped) */
+/* EXPORT */
 function exportClassStudents(type){
 let list=allStudents.filter(s=>s.classId===currentClassId);
-
 if(type==="debt")list=list.filter(s=>!isStudentComplete(s));
 if(type==="complete")list=list.filter(s=>isStudentComplete(s));
-
 if(!list.length){alert("Hakuna wanafunzi wa ku-export.");return}
 
 const reqMap={};
 list.forEach(function(s){(s.requirements||[]).forEach(function(r){reqMap[r.id]=r.name})});
 
-const headers=["Jina","Admission","Combination"];
+const headers=["Jina","Admission","Combination","Tarehe ya Usajili"];
 Object.keys(reqMap).forEach(function(id){headers.push(reqMap[id])});
 headers.push("Hali");
 
 const rows=[headers];
 list.forEach(function(s){
-const row=[s.name||"",s.admission||"",s.combinationName||""];
+const row=[s.name||"",s.admission||"",s.combinationName||"",formatDate(s.createdAt)];
 Object.keys(reqMap).forEach(function(id){
-const ok=(s.status||{})[id]===true;
-row.push(ok?"✓":"✗");
+const found=(s.requirements||[]).find(r=>r.id===id);
+const submitted=Number((s.status||{})[id])||0;
+row.push(found?(submitted+"/"+Number(found.amount)):"-");
 });
 row.push(isStudentComplete(s)?"Amekamilisha":"Anadaiwa");
 rows.push(row);
@@ -1514,77 +1621,131 @@ if(!grid)return;
 grid.innerHTML="";
 allClasses.forEach(function(c){
 const div=document.createElement("div");
-div.className="classCard";
-div.innerHTML=`<h3>${c.name}</h3><span>${c.type==="A"?"A-Level":"O-Level"}</span>`;
-div.onclick=function(){
-showPage("classes");
-openClass(c.id);
-};
+div.className="classCard "+levelClass(c.type);
+div.innerHTML=`<h3>${c.name}</h3><span>${levelLabel(c.type)}</span>`;
+div.onclick=function(){showPage("classes");openClass(c.id)};
 grid.appendChild(div);
 });
 }
 
-/* FEES */
-function loadFeeStudentOptions(){
-const select=$("feeStudentSelect");
-if(!select)return;
+/* ADA (payments within class) */
+function populateAdaStudentSelect(){
+const select=$("adaStudentSelect");
 select.innerHTML='<option value="">Chagua mwanafunzi</option>';
-allStudents.forEach(function(s){
+allStudents.filter(s=>s.classId===currentClassId).forEach(function(s){
 const o=document.createElement("option");
-o.value=s.id;
-o.textContent=s.name+(s.admission?" - "+s.admission:"")+(s.className?" ("+s.className+")":"");
+o.value=s.id;o.textContent=s.name+(s.admission?" - "+s.admission:"");
 select.appendChild(o);
 });
 }
-
-async function addFee(){
-const studentId=$("feeStudentSelect").value;
-const amount=Number($("feeAmount").value);
-const description=$("feeDescription").value.trim();
-const msg=$("feeMsg");
-if(!studentId||!amount){msg.textContent="Chagua mwanafunzi na weka kiasi.";return}
+function adaStudentChanged(){
+const studentId=$("adaStudentSelect").value;
 const student=allStudents.find(s=>s.id===studentId);
-try{
-await db.collection("users").doc(currentUser.uid).collection("fees").add({
-studentId:studentId,student:student?student.name:"",amount:amount,description:description,
-createdAt:firebase.firestore.FieldValue.serverTimestamp()
+const box=$("adaRequirementBox");
+const select=$("adaRequirementSelect");
+select.innerHTML="";
+if(!student||!(student.requirements||[]).length){box.classList.add("hidden");return}
+box.classList.remove("hidden");
+student.requirements.forEach(function(r){
+const submitted=Number((student.status||{})[r.id])||0;
+const o=document.createElement("option");
+o.value=r.id;
+o.textContent=r.name+" ("+submitted+"/"+Number(r.amount)+")";
+select.appendChild(o);
 });
-$("feeStudentSelect").value="";
-$("feeAmount").value="";
-$("feeDescription").value="";
+updateAdaReqInfo();
+}
+function updateAdaReqInfo(){
+const studentId=$("adaStudentSelect").value;
+const student=allStudents.find(s=>s.id===studentId);
+const reqId=$("adaRequirementSelect").value;
+if(!student||!reqId){$("adaReqInfo").textContent="";return}
+const r=(student.requirements||[]).find(x=>x.id===reqId);
+if(!r){$("adaReqInfo").textContent="";return}
+const submitted=Number((student.status||{})[reqId])||0;
+$("adaReqInfo").textContent="Inatakiwa: "+Number(r.amount).toLocaleString()+" | Imeshaletwa: "+submitted.toLocaleString()+" | Baki: "+Math.max(0,Number(r.amount)-submitted).toLocaleString();
+}
+async function addAdaPayment(){
+const studentId=$("adaStudentSelect").value;
+const reqId=$("adaRequirementSelect").value;
+const amount=Number($("adaAmount").value);
+const msg=$("adaMsg");
+if(!studentId||!reqId||!amount){msg.textContent="Jaza taarifa zote.";return}
+const student=allStudents.find(s=>s.id===studentId);
+const req=(student.requirements||[]).find(r=>r.id===reqId);
+const newStatus=Object.assign({},student.status||{});
+newStatus[reqId]=(Number(newStatus[reqId])||0)+amount;
+try{
+await db.collection("users").doc(currentUser.uid).collection("students").doc(studentId).update({status:newStatus});
+await db.collection("users").doc(currentUser.uid).collection("fees").add({
+studentId:studentId,student:student.name,classId:currentClassId,
+requirementId:reqId,requirementName:req?req.name:"",
+amount:amount,createdAt:firebase.firestore.FieldValue.serverTimestamp()
+});
+$("adaAmount").value="";
 msg.style.color="#16833f";
 msg.textContent="Malipo yamehifadhiwa.";
-loadFees();
+await loadStudents();
+populateAdaStudentSelect();
+$("adaStudentSelect").value=studentId;
+adaStudentChanged();
+renderAdaTable();
+renderClassOverview();
+renderClassStudentsTab("students");
+renderClassStudentsTab("debt");
+renderClassStudentsTab("complete");
 loadDashboard();
 }catch(error){
 msg.style.color="#c62828";
 msg.textContent=error.message;
 }
 }
-
-async function loadFees(){
-if(!currentUser)return;
-allFees=[];
-const table=$("feeTable");
+async function renderAdaTable(){
+const table=$("adaTable");
 table.innerHTML="";
 try{
-const snap=await db.collection("users").doc(currentUser.uid).collection("fees").orderBy("createdAt","desc").get();
+const snap=await db.collection("users").doc(currentUser.uid).collection("fees").orderBy("createdAt","desc").limit(100).get();
 snap.forEach(function(doc){
 const d=doc.data();
-allFees.push(d);
+if(d.classId!==currentClassId)return;
 const row=document.createElement("tr");
-const a=document.createElement("td");
-a.textContent=d.student||"";
-const b=document.createElement("td");
-b.textContent=Number(d.amount||0).toLocaleString();
-const c=document.createElement("td");
-c.textContent=d.description||"";
-row.appendChild(a);
-row.appendChild(b);
-row.appendChild(c);
+const a=document.createElement("td");a.textContent=d.student||"";
+const b=document.createElement("td");b.textContent=d.requirementName||"";
+const c=document.createElement("td");c.textContent=Number(d.amount||0).toLocaleString();
+row.appendChild(a);row.appendChild(b);row.appendChild(c);
 table.appendChild(row);
 });
 }catch(error){console.error(error)}
+}
+
+/* SEARCH */
+function performSearch(){
+const q=$("searchInput").value.trim().toLowerCase();
+const box=$("searchResults");
+box.innerHTML="";
+if(!q)return;
+const results=allStudents.filter(function(s){
+return (s.name||"").toLowerCase().includes(q)||(s.admission||"").toLowerCase().includes(q);
+}).slice(0,50);
+if(!results.length){box.innerHTML='<p class="small">Hakuna aliyepatikana.</p>';return}
+results.forEach(function(s){
+const div=document.createElement("div");
+div.className="searchResultCard";
+div.innerHTML=`
+<strong>${s.name}</strong><br>
+<span class="small">${s.className||""}${s.combinationName?" ("+s.combinationName+")":""}</span><br>
+<span class="small">Amesajiliwa: ${formatDate(s.createdAt)}</span><br>
+<span class="badge ${isStudentComplete(s)?'badgeYes':'badgeNo'}" style="margin-top:6px;display:inline-block">${isStudentComplete(s)?"✓ Amekamilisha":"✗ Anadaiwa"}</span>
+`;
+const editBtn=document.createElement("button");
+editBtn.className="success";
+editBtn.style.marginTop="8px";
+editBtn.style.marginLeft="8px";
+editBtn.textContent="Edit";
+editBtn.onclick=function(){editStudent(s.id).then(performSearch)};
+div.appendChild(editBtn);
+box.appendChild(div);
+});
 }
 
 /* DASHBOARD */
@@ -1592,7 +1753,6 @@ async function loadDashboard(){
 if(!currentUser)return;
 try{
 const base=db.collection("users").doc(currentUser.uid);
-
 const classes=await base.collection("classes").get();
 const combos=await base.collection("combinations").get();
 const students=await base.collection("students").get();
@@ -1613,8 +1773,9 @@ complete++;
 }else{
 debt++;
 (s.requirements||[]).forEach(function(r){
-const done=(s.status||{})[r.id]===true;
-if(!done)owed+=Number(r.amount||0);
+const submitted=Number((s.status||{})[r.id])||0;
+const amt=Number(r.amount)||0;
+if(amt>submitted)owed+=(amt-submitted);
 });
 }
 });
@@ -1641,7 +1802,8 @@ if(!doc.exists)return;
 currentUserData=doc.data();
 
 $("schoolTitle").textContent=currentUserData.schoolName||"SHULESMART";
-$("userTitle").textContent="Username: "+(currentUserData.username||"");
+$("brandTitle").textContent=currentUserData.schoolName||"SHULESMART";
+$("brandTag").classList.add("hidden");
 
 $("settingsSchool").value=currentUserData.schoolName||"";
 $("settingsUsername").value=currentUserData.username||"";
@@ -1655,7 +1817,6 @@ loadDashboard();
 }catch(error){console.error(error)}
 }
 
-/* SETTINGS */
 async function saveSettings(){
 const school=$("settingsSchool").value.trim();
 const username=$("settingsUsername").value.trim();
@@ -1671,7 +1832,6 @@ const oldUsername=currentUserData.username||"";
 if(username.toLowerCase()!==oldUsername.toLowerCase()){
 const check=await db.collection("usernames").doc(username.toLowerCase()).get();
 if(check.exists){msg.textContent="Username hiyo tayari ipo.";return}
-
 const batch=db.batch();
 batch.delete(db.collection("usernames").doc(oldUsername.toLowerCase()));
 batch.set(db.collection("usernames").doc(username.toLowerCase()),{uid:currentUser.uid,email:email});
@@ -1688,7 +1848,7 @@ currentUserData.email=email;
 currentUserData.phone=phone;
 
 $("schoolTitle").textContent=school;
-$("userTitle").textContent="Username: "+username;
+$("brandTitle").textContent=school;
 
 msg.style.color="#16833f";
 msg.textContent="Mabadiliko yamehifadhiwa.";
@@ -1704,7 +1864,6 @@ function uploadLogo(event){
 const file=event.target.files[0];
 if(!file)return;
 if(!file.type.startsWith("image/")){alert("Chagua picha.");return}
-
 const reader=new FileReader();
 reader.onload=function(e){
 const imageData=e.target.result;
@@ -1716,8 +1875,7 @@ let width=img.width;
 let height=img.height;
 if(width>height){if(width>max){height=height*max/width;width=max}}
 else{if(height>max){width=width*max/height;height=max}}
-canvas.width=width;
-canvas.height=height;
+canvas.width=width;canvas.height=height;
 const ctx=canvas.getContext("2d");
 ctx.drawImage(img,0,0,width,height);
 const compressed=canvas.toDataURL("image/jpeg",0.75);
@@ -1735,7 +1893,6 @@ img.src=imageData;
 };
 reader.readAsDataURL(file);
 }
-
 function displayLogo(data){
 $("schoolLogo").src=data;
 $("schoolLogo").classList.remove("hidden");
@@ -1743,13 +1900,11 @@ $("logoPlaceholder").classList.add("hidden");
 $("topSchoolLogo").src=data;
 $("topSchoolLogo").classList.remove("hidden");
 }
-
 function hideLogo(){
 $("schoolLogo").classList.add("hidden");
 $("logoPlaceholder").classList.remove("hidden");
 $("topSchoolLogo").classList.add("hidden");
 }
-
 async function deleteLogo(){
 if(!confirm("Una uhakika unataka kufuta nembo?"))return;
 try{
@@ -1763,26 +1918,21 @@ $("logoMsg").textContent=error.message;
 }
 }
 
-/* CHANGE PASSWORD (requires current password) */
+/* CHANGE PASSWORD */
 async function changePassword(){
 const current=$("currentPassword").value;
 const password=$("newPassword").value;
 const msg=$("passwordMsg");
-
 if(!current){msg.textContent="Weka password ya sasa.";return}
 if(password.length<6){msg.textContent="Password mpya iwe angalau characters 6.";return}
-
 try{
 const cred=firebase.auth.EmailAuthProvider.credential(currentUser.email,current);
 await currentUser.reauthenticateWithCredential(cred);
 await currentUser.updatePassword(password);
-
 $("currentPassword").value="";
 $("newPassword").value="";
-
 msg.style.color="#16833f";
 msg.textContent="Password imebadilishwa.";
-
 }catch(error){
 msg.style.color="#c62828";
 if(error.code==="auth/wrong-password"){
@@ -1793,21 +1943,102 @@ msg.textContent=error.message;
 }
 }
 
-/* ONLINE / OFFLINE */
-function updateConnection(){
-const status=$("connectionStatus");
-if(navigator.onLine){
-status.textContent="🟢 Online";
-status.style.color="#16833f";
-}else{
-status.textContent="🟠 Offline - taarifa zitasync internet ikirudi";
-status.style.color="#c47a00";
+/* FEEDBACK */
+function sendFeedback(){
+const text=$("feedbackText").value.trim();
+if(!text){alert("Andika maoni yako kwanza.");return}
+const schoolName=currentUserData?currentUserData.schoolName:"Shule";
+const msg="Maoni kutoka "+schoolName+": "+text;
+const url="https://wa.me/255744128348?text="+encodeURIComponent(msg);
+window.open(url,"_blank");
+$("feedbackText").value="";
 }
+
+/* DATE FORMAT */
+function formatDate(ts){
+if(ts&&ts.toDate){
+const d=ts.toDate();
+return d.toLocaleDateString("sw-TZ")+" "+d.toLocaleTimeString("sw-TZ",{hour:"2-digit",minute:"2-digit"});
+}
+return "-";
+}
+
+/* ONLINE / OFFLINE (Firestore offline persistence handles sync automatically - no UI status shown) */
+function updateConnection(){
+/* intentionally silent - data still syncs automatically online/offline via Firestore persistence */
 }
 window.addEventListener("online",updateConnection);
 window.addEventListener("offline",updateConnection);
 
-/* LIVE TRIAL CHECK (works even while on the lock screen, refetches fresh data) */
+/* ENTER APP */
+async function enterApp(user){
+currentUser=user;
+
+let doc;
+let attempts=0;
+while(attempts<5){
+try{
+doc=await db.collection("users").doc(user.uid).get();
+if(doc.exists)break;
+}catch(error){console.error(error)}
+attempts++;
+await new Promise(function(r){setTimeout(r,400)});
+}
+
+if(!doc||!doc.exists){
+alert("Imeshindwa kupakia account. Tafadhali jaribu ku-login tena.");
+return;
+}
+
+const userData=doc.data();
+
+if(!userData.trialStart){
+await db.collection("users").doc(user.uid).update({
+trialStart:firebase.firestore.FieldValue.serverTimestamp(),
+subscriptionStatus:userData.subscriptionStatus||"trial"
+});
+userData.trialStart={toMillis:function(){return Date.now()}};
+}
+
+const info=getTrialInfo(userData);
+if(info.expired){showLockScreen();return}
+
+$("languageSection").classList.add("hidden");
+$("choiceSection").classList.add("hidden");
+$("authSection").classList.add("hidden");
+$("lockSection").classList.add("hidden");
+$("appSection").classList.remove("hidden");
+
+updateConnection();
+
+await loadUserData(user);
+updateTrialBanner(info);
+
+await loadClasses();
+await loadCombinations();
+await loadStudents();
+
+renderDashboardClassGrid();
+showPage("dashboard");
+}
+
+/* AUTH STATE */
+auth.onAuthStateChanged(async function(user){
+if(user){
+await enterApp(user);
+}else{
+currentUser=null;
+$("appSection").classList.add("hidden");
+$("authSection").classList.add("hidden");
+$("lockSection").classList.add("hidden");
+$("languageSection").classList.remove("hidden");
+$("choiceSection").classList.add("hidden");
+$("brandTitle").textContent="SHULESMART";
+$("brandTag").classList.remove("hidden");
+}
+});
+
+/* LIVE TRIAL CHECK (works even on lock screen, refetches fresh data from Firestore) */
 setInterval(async function(){
 if(!currentUser)return;
 
@@ -1837,87 +2068,10 @@ updateTrialBanner(info);
 }
 },15000);
 
-/* ENTER APP (used by both register success and normal auth state change) */
-async function enterApp(user){
-
-currentUser=user;
-
-let doc;
-let attempts=0;
-
-/* retry a few times in case the account document is still being written */
-while(attempts<5){
-try{
-doc=await db.collection("users").doc(user.uid).get();
-if(doc.exists)break;
-}catch(error){
-console.error(error);
-}
-attempts++;
-await new Promise(function(r){setTimeout(r,400)});
-}
-
-if(!doc||!doc.exists){
-alert("Imeshindwa kupakia account. Tafadhali jaribu ku-login tena.");
-return;
-}
-
-const userData=doc.data();
-
-if(!userData.trialStart){
-await db.collection("users").doc(user.uid).update({
-trialStart:firebase.firestore.FieldValue.serverTimestamp(),
-subscriptionStatus:userData.subscriptionStatus||"trial"
-});
-userData.trialStart={toMillis:function(){return Date.now()}};
-}
-
-const info=getTrialInfo(userData);
-
-if(info.expired){showLockScreen();return}
-
-$("languageSection").classList.add("hidden");
-$("choiceSection").classList.add("hidden");
-$("authSection").classList.add("hidden");
-$("lockSection").classList.add("hidden");
-$("appSection").classList.remove("hidden");
-
-updateConnection();
-
-await loadUserData(user);
-updateTrialBanner(info);
-
-await loadClasses();
-await loadCombinations();
-await loadStudents();
-
-renderDashboardClassGrid();
-showPage("dashboard");
-
-}
-
-/* AUTH STATE */
-auth.onAuthStateChanged(async function(user){
-
-if(user){
-
-await enterApp(user);
-
-}else{
-
-currentUser=null;
-$("appSection").classList.add("hidden");
-$("authSection").classList.add("hidden");
-$("lockSection").classList.add("hidden");
-$("languageSection").classList.remove("hidden");
-$("choiceSection").classList.add("hidden");
-
-}
-});
-
-/* DEFAULT LANGUAGE */
+/* DEFAULT LANGUAGE + CLASS FORM INIT */
 $("language").value="sw";
 changeLanguage();
+classTypeChanged();
 
 </script>
 </body>
