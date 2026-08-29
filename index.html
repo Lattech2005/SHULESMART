@@ -326,7 +326,10 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 <span data-sw="WASILIANA KWA WHATSAPP" data-en="CONTACT VIA WHATSAPP">WASILIANA KWA WHATSAPP</span>
 </button>
 </a>
-<button class="logout" style="margin-top:20px;width:100%" onclick="logout()">LOGOUT</button>
+<button class="secondary" style="margin-top:10px" onclick="recheckSubscription()">
+<span data-sw="NIMESHALIPIA - ANGALIA TENA" data-en="I HAVE PAID - CHECK AGAIN">NIMESHALIPIA - ANGALIA TENA</span>
+</button>
+<button class="logout" style="margin-top:10px;width:100%" onclick="logout()">LOGOUT</button>
 </div>
 </div>
 </section>
@@ -743,12 +746,30 @@ function logout(){auth.signOut()}
 
 /* TRIAL */
 function getTrialInfo(userData){
-if(userData.subscriptionStatus==="active"){return{expired:false,active:true,minutesLeft:null}}
-let startMillis=Date.now();
+const now=Date.now();
+
+/* Priority 1: subscriptionEndDate - a real end date set by admin (works for any number of months) */
+if(userData.subscriptionEndDate&&userData.subscriptionEndDate.toMillis){
+const endMillis=userData.subscriptionEndDate.toMillis();
+if(endMillis>now){
+const daysLeft=Math.max(1,Math.ceil((endMillis-now)/(1000*60*60*24)));
+return{expired:false,active:true,minutesLeft:null,daysLeft:daysLeft,mode:"paid"};
+}else{
+return{expired:true,active:false,minutesLeft:0,daysLeft:0,mode:"paid_expired"};
+}
+}
+
+/* Priority 2: subscriptionStatus="active" with no end date - permanent override (legacy/manual) */
+if(userData.subscriptionStatus==="active"){
+return{expired:false,active:true,minutesLeft:null,daysLeft:null,mode:"active_flag"};
+}
+
+/* Priority 3: trial countdown */
+let startMillis=now;
 if(userData.trialStart&&userData.trialStart.toMillis){startMillis=userData.trialStart.toMillis()}
-const elapsedMinutes=(Date.now()-startMillis)/(1000*60);
+const elapsedMinutes=(now-startMillis)/(1000*60);
 const minutesLeft=Math.max(0,Math.ceil(TRIAL_MINUTES-elapsedMinutes));
-return{expired:elapsedMinutes>=TRIAL_MINUTES,active:false,minutesLeft:minutesLeft};
+return{expired:elapsedMinutes>=TRIAL_MINUTES,active:false,minutesLeft:minutesLeft,mode:"trial"};
 }
 
 function showLockScreen(){
@@ -759,14 +780,39 @@ $("appSection").classList.add("hidden");
 $("lockSection").classList.remove("hidden");
 }
 
+async function recheckSubscription(){
+if(!currentUser)return;
+try{
+const doc=await db.collection("users").doc(currentUser.uid).get();
+if(!doc.exists)return;
+currentUserData=doc.data();
+const info=getTrialInfo(currentUserData);
+if(!info.expired){
+await enterApp(currentUser);
+}else{
+alert("Bado hujaidhinishwa. Tafadhali subiri au wasiliana na msimamizi.");
+}
+}catch(error){
+console.error(error);
+}
+}
+
 function updateTrialBanner(info){
 const el=$("trialBannerText");
 const settingsText=$("subStatusText");
+
 if(info.active){
+if(info.mode==="paid"){
+el.classList.remove("hidden");
+el.textContent="Subscription: siku "+info.daysLeft+" zimebaki";
+if(settingsText){settingsText.textContent="Subscription: Active — siku "+info.daysLeft+" zimebaki.";settingsText.style.color="#16833f"}
+}else{
 el.classList.add("hidden");
-if(settingsText){settingsText.textContent="Subscription: Active ✓ (Umeidhinishwa)";settingsText.style.color="#16833f"}
+if(settingsText){settingsText.textContent="Subscription: Active ✓ (Umeidhinishwa - hakuna ukomo)";settingsText.style.color="#16833f"}
+}
 return;
 }
+
 el.classList.remove("hidden");
 el.classList.remove("trialOk");
 el.classList.add("trialActive");
@@ -1761,15 +1807,33 @@ status.style.color="#c47a00";
 window.addEventListener("online",updateConnection);
 window.addEventListener("offline",updateConnection);
 
-/* LIVE TRIAL CHECK (important now that trial is only 10 minutes) */
-setInterval(function(){
-if(!currentUser||!currentUserData)return;
-if($("appSection").classList.contains("hidden"))return;
+/* LIVE TRIAL CHECK (works even while on the lock screen, refetches fresh data) */
+setInterval(async function(){
+if(!currentUser)return;
+
+let doc;
+try{
+doc=await db.collection("users").doc(currentUser.uid).get();
+}catch(error){
+console.error(error);
+return;
+}
+if(!doc.exists)return;
+
+currentUserData=doc.data();
 const info=getTrialInfo(currentUserData);
+
+const onLockScreen=!$("lockSection").classList.contains("hidden");
+const onAppScreen=!$("appSection").classList.contains("hidden");
+
 if(info.expired){
-showLockScreen();
+if(onAppScreen)showLockScreen();
 }else{
+if(onLockScreen){
+await enterApp(currentUser);
+}else if(onAppScreen){
 updateTrialBanner(info);
+}
 }
 },15000);
 
