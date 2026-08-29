@@ -1611,14 +1611,16 @@ const csv=rows.map(function(row){
 return row.map(function(value){return '"'+String(value).replace(/"/g,'""')+'"'}).join(",");
 }).join("\n");
 
-const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8;"});
-const url=URL.createObjectURL(blob);
+/* Use a data: URI instead of blob: - some Android browsers/download managers
+   cannot download blob: URLs served from GitHub Pages and similar static hosts */
+const dataUri="data:text/csv;charset=utf-8,"+encodeURIComponent("\ufeff"+csv);
 const a=document.createElement("a");
 const cls=allClasses.find(c=>c.id===currentClassId);
-a.href=url;
+a.href=dataUri;
 a.download="shulesmart-"+(cls?cls.name.replace(/\s+/g,"_"):"darasa")+".csv";
+document.body.appendChild(a);
 a.click();
-URL.revokeObjectURL(url);
+document.body.removeChild(a);
 }
 
 /* DASHBOARD CLASS GRID */
