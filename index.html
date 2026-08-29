@@ -245,7 +245,7 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 <button onclick="showLogin()"><span data-sw="INGIA" data-en="LOGIN">INGIA</span></button>
 <button onclick="showRegister()"><span data-sw="FUNGUA ACCOUNT MPYA" data-en="CREATE NEW ACCOUNT">FUNGUA ACCOUNT MPYA</span></button>
 </div>
-<p class="small" style="margin-top:16px" data-sw="Utapata wiki 1 ya majaribio bila malipo ukifungua account mpya." data-en="You get 1 week free trial when you create a new account.">Utapata wiki 1 ya majaribio bila malipo ukifungua account mpya.</p>
+<p class="small" style="margin-top:16px" data-sw="Utapata dakika 5 za majaribio bila malipo ukifungua account mpya." data-en="You get 5 minutes free trial when you create a new account.">Utapata dakika 5 za majaribio bila malipo ukifungua account mpya.</p>
 </div>
 </section>
 
@@ -271,7 +271,7 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 
 <div id="registerBox" class="card authCard hidden">
 <h2 data-sw="Fungua Account" data-en="Create Account">Fungua Account</h2>
-<p class="small" data-sw="Utapata wiki 1 (siku 7) ya kutumia mfumo bure kuanzia leo." data-en="You will get 1 week (7 days) free trial starting today.">Utapata wiki 1 (siku 7) ya kutumia mfumo bure kuanzia leo.</p>
+<p class="small" data-sw="Utapata dakika 5 za kutumia mfumo bure kuanzia sasa." data-en="You will get 5 minutes to use the system free starting now.">Utapata dakika 5 za kutumia mfumo bure kuanzia sasa.</p>
 <label data-sw="Jina la shule" data-en="School name">Jina la shule</label>
 <input id="registerSchool" type="text">
 <label data-sw="Username" data-en="Username">Username</label>
@@ -594,7 +594,7 @@ const db=firebase.firestore();
 
 db.enablePersistence({synchronizeTabs:true}).catch(function(e){console.log("Offline persistence:",e.code)});
 
-const TRIAL_DAYS=7;
+const TRIAL_MINUTES=5;
 
 let currentUser=null;
 let currentUserData=null;
@@ -691,7 +691,7 @@ await batch.commit();
 try{await credential.user.sendEmailVerification()}catch(e){console.log(e)}
 
 msg.style.color="#16833f";
-msg.textContent="Account imetengenezwa. Una wiki 1 ya majaribio bure. Verification email imetumwa.";
+msg.textContent="Account imetengenezwa. Una dakika 5 za majaribio bure. Verification email imetumwa.";
 
 }catch(error){
 console.error(error);
@@ -736,12 +736,12 @@ function logout(){auth.signOut()}
 
 /* TRIAL */
 function getTrialInfo(userData){
-if(userData.subscriptionStatus==="active"){return{expired:false,active:true,daysLeft:null}}
+if(userData.subscriptionStatus==="active"){return{expired:false,active:true,minutesLeft:null}}
 let startMillis=Date.now();
 if(userData.trialStart&&userData.trialStart.toMillis){startMillis=userData.trialStart.toMillis()}
-const elapsedDays=(Date.now()-startMillis)/(1000*60*60*24);
-const daysLeft=Math.max(0,Math.ceil(TRIAL_DAYS-elapsedDays));
-return{expired:elapsedDays>=TRIAL_DAYS,active:false,daysLeft:daysLeft};
+const elapsedMinutes=(Date.now()-startMillis)/(1000*60);
+const minutesLeft=Math.max(0,Math.ceil(TRIAL_MINUTES-elapsedMinutes));
+return{expired:elapsedMinutes>=TRIAL_MINUTES,active:false,minutesLeft:minutesLeft};
 }
 
 function showLockScreen(){
@@ -763,8 +763,8 @@ return;
 el.classList.remove("hidden");
 el.classList.remove("trialOk");
 el.classList.add("trialActive");
-el.textContent=$("language").value==="sw"?("Trial: siku "+info.daysLeft+" zimebaki"):("Trial: "+info.daysLeft+" days left");
-if(settingsText){settingsText.textContent="Subscription: Trial - siku "+info.daysLeft+" zimebaki.";settingsText.style.color="#9a6400"}
+el.textContent=$("language").value==="sw"?("Trial: dakika "+info.minutesLeft+" zimebaki"):("Trial: "+info.minutesLeft+" minutes left");
+if(settingsText){settingsText.textContent="Subscription: Trial - dakika "+info.minutesLeft+" zimebaki.";settingsText.style.color="#9a6400"}
 }
 
 /* TOP NAV */
@@ -1753,6 +1753,18 @@ status.style.color="#c47a00";
 }
 window.addEventListener("online",updateConnection);
 window.addEventListener("offline",updateConnection);
+
+/* LIVE TRIAL CHECK (important now that trial is only 5 minutes) */
+setInterval(function(){
+if(!currentUser||!currentUserData)return;
+if($("appSection").classList.contains("hidden"))return;
+const info=getTrialInfo(currentUserData);
+if(info.expired){
+showLockScreen();
+}else{
+updateTrialBanner(info);
+}
+},15000);
 
 /* AUTH STATE */
 auth.onAuthStateChanged(async function(user){
