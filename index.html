@@ -245,7 +245,7 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 <button onclick="showLogin()"><span data-sw="INGIA" data-en="LOGIN">INGIA</span></button>
 <button onclick="showRegister()"><span data-sw="FUNGUA ACCOUNT MPYA" data-en="CREATE NEW ACCOUNT">FUNGUA ACCOUNT MPYA</span></button>
 </div>
-<p class="small" style="margin-top:16px" data-sw="Utapata dakika 5 za majaribio bila malipo ukifungua account mpya." data-en="You get 5 minutes free trial when you create a new account.">Utapata dakika 5 za majaribio bila malipo ukifungua account mpya.</p>
+<p class="small" style="margin-top:16px" data-sw="Utapata dakika 10 za majaribio bila malipo ukifungua account mpya." data-en="You get 10 minutes free trial when you create a new account.">Utapata dakika 10 za majaribio bila malipo ukifungua account mpya.</p>
 </div>
 </section>
 
@@ -271,7 +271,7 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 
 <div id="registerBox" class="card authCard hidden">
 <h2 data-sw="Fungua Account" data-en="Create Account">Fungua Account</h2>
-<p class="small" data-sw="Utapata dakika 5 za kutumia mfumo bure kuanzia sasa." data-en="You will get 5 minutes to use the system free starting now.">Utapata dakika 5 za kutumia mfumo bure kuanzia sasa.</p>
+<p class="small" data-sw="Utapata dakika 10 za kutumia mfumo bure kuanzia sasa." data-en="You will get 10 minutes to use the system free starting now.">Utapata dakika 10 za kutumia mfumo bure kuanzia sasa.</p>
 <label data-sw="Jina la shule" data-en="School name">Jina la shule</label>
 <input id="registerSchool" type="text">
 <label data-sw="Username" data-en="Username">Username</label>
@@ -316,7 +316,7 @@ border:0;background:none;color:#315efb;font-weight:bold;margin-bottom:14px;paddi
 <div class="lockCard">
 <div class="icon">🔒</div>
 <h2 data-sw="Muda wa Majaribio Umeisha" data-en="Trial Period Ended">Muda wa Majaribio Umeisha</h2>
-<p data-sw="Dakika 5 za majaribio ya bure ya SHULESMART zimekwisha. Ili kuendelea kutumia mfumo, tafadhali lipia subscription." data-en="Your 5 minute free trial of SHULESMART has ended. To continue using the system, please pay for a subscription.">Dakika 5 za majaribio ya bure ya SHULESMART zimekwisha. Ili kuendelea kutumia mfumo, tafadhali lipia subscription.</p>
+<p data-sw="Dakika 10 za majaribio ya bure ya SHULESMART zimekwisha. Ili kuendelea kutumia mfumo, tafadhali lipia subscription." data-en="Your 10 minute free trial of SHULESMART has ended. To continue using the system, please pay for a subscription.">Dakika 5 za majaribio ya bure ya SHULESMART zimekwisha. Ili kuendelea kutumia mfumo, tafadhali lipia subscription.</p>
 <div class="contactBox">
 <strong data-sw="Wasiliana ili kulipia:" data-en="Contact to subscribe:">Wasiliana ili kulipia:</strong>
 <span data-sw="Piga simu au tuma ujumbe kwa msimamizi wa SHULESMART kulipia na kufungua account yako." data-en="Call or message the SHULESMART admin to pay and unlock your account.">Piga simu au tuma ujumbe kwa msimamizi wa SHULESMART kulipia na kufungua account yako.</span>
@@ -599,7 +599,7 @@ const db=firebase.firestore();
 
 db.enablePersistence({synchronizeTabs:true}).catch(function(e){console.log("Offline persistence:",e.code)});
 
-const TRIAL_MINUTES=5;
+const TRIAL_MINUTES=10;
 
 let currentUser=null;
 let currentUserData=null;
@@ -696,7 +696,9 @@ await batch.commit();
 try{await credential.user.sendEmailVerification()}catch(e){console.log(e)}
 
 msg.style.color="#16833f";
-msg.textContent="Account imetengenezwa. Una dakika 5 za majaribio bure. Verification email imetumwa.";
+msg.textContent="Account imetengenezwa. Una dakika 10 za majaribio bure.";
+
+await enterApp(credential.user);
 
 }catch(error){
 console.error(error);
@@ -1759,7 +1761,7 @@ status.style.color="#c47a00";
 window.addEventListener("online",updateConnection);
 window.addEventListener("offline",updateConnection);
 
-/* LIVE TRIAL CHECK (important now that trial is only 5 minutes) */
+/* LIVE TRIAL CHECK (important now that trial is only 10 minutes) */
 setInterval(function(){
 if(!currentUser||!currentUserData)return;
 if($("appSection").classList.contains("hidden"))return;
@@ -1771,15 +1773,30 @@ updateTrialBanner(info);
 }
 },15000);
 
-/* AUTH STATE */
-auth.onAuthStateChanged(async function(user){
+/* ENTER APP (used by both register success and normal auth state change) */
+async function enterApp(user){
+
 currentUser=user;
 
-if(user){
-
 let doc;
-try{doc=await db.collection("users").doc(user.uid).get()}catch(error){console.error(error);return}
-if(!doc.exists)return;
+let attempts=0;
+
+/* retry a few times in case the account document is still being written */
+while(attempts<5){
+try{
+doc=await db.collection("users").doc(user.uid).get();
+if(doc.exists)break;
+}catch(error){
+console.error(error);
+}
+attempts++;
+await new Promise(function(r){setTimeout(r,400)});
+}
+
+if(!doc||!doc.exists){
+alert("Imeshindwa kupakia account. Tafadhali jaribu ku-login tena.");
+return;
+}
 
 const userData=doc.data();
 
@@ -1813,8 +1830,18 @@ await loadStudents();
 renderDashboardClassGrid();
 showPage("dashboard");
 
+}
+
+/* AUTH STATE */
+auth.onAuthStateChanged(async function(user){
+
+if(user){
+
+await enterApp(user);
+
 }else{
 
+currentUser=null;
 $("appSection").classList.add("hidden");
 $("authSection").classList.add("hidden");
 $("lockSection").classList.add("hidden");
