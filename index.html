@@ -130,7 +130,7 @@ font-weight:700;box-shadow:0 6px 16px rgba(79,70,229,.3);
 position:relative;
 display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;
 background:var(--grad-hero);padding:16px 60px 16px 18px;border-radius:16px;color:#fff;
-flex-wrap:nowrap;overflow:hidden;
+flex-wrap:nowrap;
 }
 .schoolHeading{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
 .schoolHeading > div{min-width:0}
@@ -254,7 +254,6 @@ background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;border:1.5px 
 .grid{grid-template-columns:1fr}
 .choice{grid-template-columns:1fr}
 .classGrid{grid-template-columns:1fr}
-.topbar{flex-wrap:wrap}
 }
 </style>
 </head>
@@ -683,6 +682,11 @@ measurementId:"G-J3EGJT6QF3"
 
 firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth();
+
+/* SECURITY: do not remember login across app restarts - password required every time the app is opened fresh */
+auth.setPersistence(firebase.auth.Auth.Persistence.NONE).catch(function(error){
+console.error("Persistence setting failed:",error);
+});
 const db=firebase.firestore();
 
 db.enablePersistence({synchronizeTabs:true}).catch(function(e){console.log("Offline persistence:",e.code)});
