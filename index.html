@@ -130,7 +130,7 @@ font-weight:700;box-shadow:0 6px 16px rgba(79,70,229,.3);
 position:relative;
 display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;
 background:var(--grad-hero);padding:16px 60px 16px 18px;border-radius:16px;color:#fff;
-flex-wrap:nowrap;
+flex-wrap:nowrap;overflow:hidden;
 }
 .schoolHeading{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
 .schoolHeading > div{min-width:0}
@@ -244,6 +244,23 @@ padding:8px 18px;border-radius:20px;margin:8px 0 4px;font-size:15px;
 background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;border:1.5px solid #ECE9FB;
 }
 
+.modalOverlay{
+position:fixed;inset:0;background:rgba(30,27,75,.55);display:flex;align-items:center;
+justify-content:center;z-index:300;padding:18px;
+}
+.modalBox{
+background:#fff;border-radius:18px;padding:22px;max-width:480px;width:100%;
+max-height:85vh;overflow-y:auto;box-shadow:0 20px 50px rgba(0,0,0,.3);
+}
+.modalBox h3{margin-bottom:14px;color:var(--ink)}
+.modalActions{display:flex;gap:10px;margin-top:16px}
+.modalActions button{flex:1;margin-top:0}
+
+.themeSwatch{
+width:50px;height:50px;border-radius:50%;border:3px solid transparent;cursor:pointer;flex-shrink:0;
+}
+.themeSwatch.selected{border-color:var(--ink)}
+
 @media(max-width:800px){
 .grid{grid-template-columns:repeat(2,1fr)}
 .nav{grid-template-columns:repeat(2,1fr)}
@@ -254,6 +271,7 @@ background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;border:1.5px 
 .grid{grid-template-columns:1fr}
 .choice{grid-template-columns:1fr}
 .classGrid{grid-template-columns:1fr}
+.topbar{flex-wrap:wrap}
 }
 </style>
 </head>
@@ -437,8 +455,10 @@ background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;border:1.5px 
 <label data-sw="Jina la darasa" data-en="Class name">Jina la darasa</label>
 <select id="classNameSelect" onchange="classNameSelectChanged()"></select>
 <input id="classNameCustom" class="hidden" placeholder="Andika jina la darasa">
+<label data-sw="Ada (TSh) - moja kwa darasa zima" data-en="Fee (TSh) - one for the whole class">Ada (TSh) - moja kwa darasa zima</label>
+<input id="classFee" type="number" placeholder="Mfano: 500000">
 <div id="classReqSection">
-<h3 style="margin-top:18px" data-sw="Mahitaji ya darasa" data-en="Class requirements">Mahitaji ya darasa</h3>
+<h3 style="margin-top:18px" data-sw="Mahitaji Mengine (Vitabu, Sare, n.k.)" data-en="Other requirements (Books, Uniform, etc.)">Mahitaji Mengine (Vitabu, Sare, n.k.)</h3>
 <div id="classRequirements"></div>
 <button class="secondary" onclick="addRequirementRow('classRequirements')" data-sw="+ Ongeza hitaji" data-en="+ Add requirement">Ongeza hitaji</button>
 </div>
@@ -475,10 +495,17 @@ background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;border:1.5px 
 <div class="stat"><span data-sw="Wasiodaiwa" data-en="Complete">Wasiodaiwa</span><strong id="ovComplete">0</strong></div>
 </div>
 <div class="card" style="margin-top:16px" id="classReqCard">
-<h3 data-sw="Mahitaji ya Darasa" data-en="Class Requirements">Mahitaji ya Darasa</h3>
+<h3 data-sw="Ada ya Darasa" data-en="Class Fee">Ada ya Darasa</h3>
+<p id="classFeeDisplay" class="small" style="margin-top:8px"></p>
+<button class="secondary" onclick="editClassFee()" data-sw="Hariri Ada" data-en="Edit Fee">Hariri Ada</button>
+
+<div id="classOtherReqSection" style="margin-top:20px">
+<h3 data-sw="Mahitaji Mengine" data-en="Other Requirements">Mahitaji Mengine</h3>
 <div id="classReqList" style="margin-top:10px"></div>
-<button class="secondary" onclick="editClassRequirements()" data-sw="Hariri Mahitaji" data-en="Edit Requirements">Hariri Mahitaji</button>
-<button class="danger" style="margin-top:8px" onclick="deleteClassFromDetail()" data-sw="FUTA DARASA" data-en="DELETE CLASS">FUTA DARASA</button>
+<button class="secondary" onclick="editClassRequirements()" data-sw="Hariri Mahitaji Mengine" data-en="Edit Other Requirements">Hariri Mahitaji Mengine</button>
+</div>
+
+<button class="danger" style="margin-top:16px" onclick="deleteClassFromDetail()" data-sw="FUTA DARASA" data-en="DELETE CLASS">FUTA DARASA</button>
 <p id="classDetailMsg" class="message"></p>
 </div>
 </div>
@@ -509,6 +536,10 @@ background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;border:1.5px 
 <input id="studentName">
 <label data-sw="Admission Number (Hiari)" data-en="Admission Number (Optional)">Admission Number (Hiari)</label>
 <input id="studentAdmission">
+<label data-sw="Namba ya Mzazi/Mlezi" data-en="Parent/Guardian Phone">Namba ya Mzazi/Mlezi</label>
+<input id="studentParentPhone" type="tel" placeholder="0744123456">
+<label data-sw="Sehemu Anapoishi" data-en="Location">Sehemu Anapoishi</label>
+<input id="studentLocation" placeholder="Mfano: Mtaa/Kijiji/Kata">
 <div id="studentCombinationBox" class="hidden">
 <label data-sw="Combination" data-en="Combination">Combination</label>
 <select id="studentCombination" onchange="showStudentRequirementsFromCombo()"><option value="">Chagua combination</option></select>
@@ -520,12 +551,20 @@ background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;border:1.5px 
 </div>
 
 <div class="card">
+<h2 data-sw="Pakia Wanafunzi Wengi (CSV)" data-en="Bulk Import Students (CSV)">Pakia Wanafunzi Wengi (CSV)</h2>
+<p class="small" data-sw="Faili la CSV liwe na columns: Jina, Admission, NambaYaMzazi, Sehemu (na Combination kwa A-Level)." data-en="CSV file should have columns: Jina, Admission, NambaYaMzazi, Sehemu (and Combination for A-Level).">Faili la CSV liwe na columns: Jina, Admission, NambaYaMzazi, Sehemu (na Combination kwa A-Level).</p>
+<input type="file" id="bulkImportFile" accept=".csv" style="margin-top:10px">
+<button class="secondary" onclick="bulkImportStudents()" data-sw="Pakia Faili" data-en="Upload File">Pakia Faili</button>
+<p id="bulkImportMsg" class="message"></p>
+</div>
+
+<div class="card">
 <h2 data-sw="Wanafunzi Wote wa Darasa" data-en="All Students in Class">Wanafunzi Wote wa Darasa</h2>
 <div id="classComboFilterBox" class="hidden" style="margin-top:10px">
 <select id="classComboFilter" onchange="renderClassStudentsTab('students')"><option value="">Combination zote</option></select>
 </div>
 <div class="exportBox">
-<button onclick="exportClassStudents('all')">📥 Export Wote</button>
+<button onclick="exportClassStudents('all')" data-sw="📥 Pakua Wote" data-en="📥 Download All">📥 Pakua Wote</button>
 </div>
 <div class="tableWrap">
 <table><thead id="studentsHeadAll"></thead><tbody id="studentsBodyAll"></tbody></table>
@@ -547,6 +586,11 @@ background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;border:1.5px 
 <input id="adaAmount" type="number">
 <button class="primary" onclick="addAdaPayment()"><span data-sw="HIFADHI MALIPO" data-en="SAVE PAYMENT">HIFADHI MALIPO</span></button>
 <p id="adaMsg" class="message"></p>
+<div id="adaReceiptBox" class="hidden" style="margin-top:12px">
+<button class="primary" style="background:#25D366;box-shadow:0 6px 16px rgba(37,211,102,.35)" onclick="sendAdaReceipt()">
+<span data-sw="TUMA RISITI KWA WHATSAPP" data-en="SEND RECEIPT VIA WHATSAPP">TUMA RISITI KWA WHATSAPP</span>
+</button>
+</div>
 </div>
 <div class="card">
 <h2 data-sw="Malipo ya Hivi Karibuni" data-en="Recent Payments">Malipo ya Hivi Karibuni</h2>
@@ -559,7 +603,7 @@ background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;border:1.5px 
 <div id="classTabDebt" class="hidden">
 <div class="card">
 <h2 data-sw="Wanaodaiwa" data-en="Debtors">Wanaodaiwa</h2>
-<div class="exportBox"><button onclick="exportClassStudents('debt')">📥 Export Wanaodaiwa</button></div>
+<div class="exportBox"><button onclick="exportClassStudents('debt')" data-sw="📥 Pakua Wanaodaiwa" data-en="📥 Download Debtors">📥 Pakua Wanaodaiwa</button></div>
 <div class="tableWrap">
 <table><thead id="studentsHeadDebt"></thead><tbody id="studentsBodyDebt"></tbody></table>
 </div>
@@ -569,7 +613,7 @@ background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;border:1.5px 
 <div id="classTabComplete" class="hidden">
 <div class="card">
 <h2 data-sw="Wasiodaiwa" data-en="Complete">Wasiodaiwa</h2>
-<div class="exportBox"><button onclick="exportClassStudents('complete')">📥 Export Wasiodaiwa</button></div>
+<div class="exportBox"><button onclick="exportClassStudents('complete')" data-sw="📥 Pakua Wasiodaiwa" data-en="📥 Download Complete">📥 Pakua Wasiodaiwa</button></div>
 <div class="tableWrap">
 <table><thead id="studentsHeadComplete"></thead><tbody id="studentsBodyComplete"></tbody></table>
 </div>
@@ -613,6 +657,12 @@ background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;border:1.5px 
 <h2 data-sw="Hali ya Subscription" data-en="Subscription Status">Hali ya Subscription</h2>
 <p id="subStatusText" class="small"></p>
 <p class="small" style="margin-top:8px" data-sw="Bei: TSh 10,000 kwa mwezi." data-en="Price: TSh 10,000 per month.">Bei: TSh 10,000 kwa mwezi.</p>
+</div>
+
+<div class="card">
+<h2 data-sw="Rangi ya App" data-en="App Color">Rangi ya App</h2>
+<p class="small" data-sw="Chagua rangi unayopenda kwa mfumo wako." data-en="Choose your preferred color for your system.">Chagua rangi unayopenda kwa mfumo wako.</p>
+<div id="themeSwatches" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px"></div>
 </div>
 
 <div class="card">
@@ -664,6 +714,18 @@ background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;border:1.5px 
 
 </div>
 
+<!-- MODAL (SHULESMART styled - replaces browser prompt/confirm) -->
+<div id="modalOverlay" class="modalOverlay hidden">
+<div class="modalBox">
+<h3 id="modalTitle"></h3>
+<div id="modalBody"></div>
+<div class="modalActions">
+<button class="secondary" onclick="closeModal()" data-sw="Ghairi" data-en="Cancel">Ghairi</button>
+<button class="primary" id="modalConfirmBtn">Hifadhi</button>
+</div>
+</div>
+</div>
+
 <!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -693,6 +755,56 @@ db.enablePersistence({synchronizeTabs:true}).catch(function(e){console.log("Offl
 
 const TRIAL_DAYS=7;
 
+/* THEMES */
+const THEMES={
+indigo:{primary:"#4F46E5",primaryDark:"#3730A3",accent:"#FF6B35",accent2:"#FFC145",gradHero:"linear-gradient(135deg,#4F46E5 0%,#7C3AED 50%,#FF6B35 100%)"},
+blue:{primary:"#2563EB",primaryDark:"#1D4ED8",accent:"#F59E0B",accent2:"#FCD34D",gradHero:"linear-gradient(135deg,#2563EB 0%,#0EA5E9 50%,#F59E0B 100%)"},
+green:{primary:"#059669",primaryDark:"#047857",accent:"#F97316",accent2:"#FDBA74",gradHero:"linear-gradient(135deg,#059669 0%,#10B981 50%,#F97316 100%)"},
+purple:{primary:"#9333EA",primaryDark:"#7E22CE",accent:"#EC4899",accent2:"#F9A8D4",gradHero:"linear-gradient(135deg,#9333EA 0%,#C026D3 50%,#EC4899 100%)"},
+red:{primary:"#DC2626",primaryDark:"#B91C1C",accent:"#F59E0B",accent2:"#FCA5A5",gradHero:"linear-gradient(135deg,#DC2626 0%,#EA580C 50%,#F59E0B 100%)"},
+teal:{primary:"#0D9488",primaryDark:"#0F766E",accent:"#8B5CF6",accent2:"#C4B5FD",gradHero:"linear-gradient(135deg,#0D9488 0%,#14B8A6 50%,#8B5CF6 100%)"}
+};
+
+function applyTheme(key){
+const t=THEMES[key]||THEMES.indigo;
+const root=document.documentElement.style;
+root.setProperty("--primary",t.primary);
+root.setProperty("--primary-dark",t.primaryDark);
+root.setProperty("--accent",t.accent);
+root.setProperty("--accent2",t.accent2);
+root.setProperty("--grad-hero",t.gradHero);
+root.setProperty("--grad-primary-btn","linear-gradient(135deg,"+t.primary+","+t.primaryDark+")");
+root.setProperty("--grad-accent-btn","linear-gradient(135deg,"+t.accent+","+t.accent2+")");
+}
+
+async function selectTheme(key){
+applyTheme(key);
+renderThemeSwatches(key);
+if(currentUser){
+try{
+await db.collection("users").doc(currentUser.uid).update({themeColor:key});
+if(currentUserData)currentUserData.themeColor=key;
+}catch(error){console.error(error)}
+}
+}
+
+function renderThemeSwatches(activeKey){
+const box=$("themeSwatches");
+if(!box)return;
+const current=activeKey||(currentUserData&&currentUserData.themeColor)||"indigo";
+box.innerHTML="";
+Object.keys(THEMES).forEach(function(key){
+const t=THEMES[key];
+const btn=document.createElement("button");
+btn.type="button";
+btn.className="themeSwatch"+(key===current?" selected":"");
+btn.style.background=t.gradHero;
+btn.onclick=function(){selectTheme(key)};
+box.appendChild(btn);
+});
+}
+
+
 const CLASS_NAME_OPTIONS={
 P:["Darasa la Kwanza","Darasa la Pili","Darasa la Tatu","Darasa la Nne","Darasa la Tano","Darasa la Sita","Darasa la Saba"],
 O:["Form One","Form Two","Form Three","Form Four"],
@@ -707,6 +819,42 @@ let allCombinations=[];
 let currentClassId=null;
 
 function $(id){return document.getElementById(id)}
+
+/* SECURITY: escape any user-provided text before inserting via innerHTML, to prevent stored XSS */
+function escapeHtml(str){
+return String(str==null?"":str)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#39;");
+}
+
+/* MODAL SYSTEM (replaces browser prompt/confirm with SHULESMART-styled dialogs) */
+function openModal(title,bodyHtml,onConfirm,confirmLabel){
+$("modalTitle").textContent=title;
+$("modalBody").innerHTML=bodyHtml;
+const oldBtn=$("modalConfirmBtn");
+const newBtn=oldBtn.cloneNode(true);
+oldBtn.parentNode.replaceChild(newBtn,oldBtn);
+newBtn.textContent=confirmLabel||"Hifadhi";
+newBtn.onclick=async function(){
+newBtn.disabled=true;
+try{
+await onConfirm();
+}catch(error){
+alert(error.message||"Hitilafu imetokea.");
+}
+newBtn.disabled=false;
+};
+$("modalOverlay").classList.remove("hidden");
+}
+function closeModal(){
+$("modalOverlay").classList.add("hidden");
+}
+function openConfirmModal(title,message,onConfirm){
+openModal(title,"<p>"+escapeHtml(message)+"</p>",async function(){await onConfirm();closeModal();},"Thibitisha");
+}
 
 function levelLabel(type){
 if(type==="A")return "A-Level";
@@ -970,31 +1118,76 @@ result.push({id:"r_"+Date.now()+"_"+Math.random().toString(36).slice(2,8),name:n
 });
 return result;
 }
-async function editRequirementsFlow(collectionName,docId,requirements){
-let reqs=requirements.slice();
-let i=0;
-while(i<reqs.length){
-const r=reqs[i];
-const answer=prompt(
-"Hitaji: "+r.name+"\nKiasi cha sasa: "+r.amount+
-"\n\nWeka kiasi kipya, au andika 'DELETE' kufuta hitaji hili. Bonyeza Cancel kuruka.",
-r.amount
-);
-if(answer===null){i++;continue}
-if(answer.trim().toUpperCase()==="DELETE"){reqs.splice(i,1);continue}
-const num=Number(answer);
-if(!isNaN(num)){r.amount=num}
-i++;
+/* REQUIREMENTS MODAL (SHULESMART styled - Add/Edit/Delete requirements) */
+let modalReqState=[];
+let modalReqCollection="";
+let modalReqDocId="";
+let modalReqOnSaved=null;
+
+function syncModalReqStateFromDOM(){
+const rows=document.querySelectorAll("#modalReqRows .requirementRow");
+rows.forEach(function(row,i){
+if(!modalReqState[i])return;
+modalReqState[i].name=row.querySelector(".modalReqName").value;
+modalReqState[i].amount=Number(row.querySelector(".modalReqAmount").value)||0;
+});
 }
-if(confirm("Ongeza hitaji jipya?")){
-const name=prompt("Jina la hitaji jipya:");
-if(name&&name.trim()){
-const amt=Number(prompt("Kiasi:","0"))||0;
-reqs.push({id:"r_"+Date.now()+"_"+Math.random().toString(36).slice(2,8),name:name.trim(),amount:amt});
+function renderModalReqRows(){
+const container=$("modalReqRows");
+container.innerHTML="";
+modalReqState.forEach(function(r,i){
+const div=document.createElement("div");
+div.className="requirementRow";
+div.innerHTML=`
+<input class="modalReqName" value="${escapeHtml(r.name)}" placeholder="Jina la hitaji">
+<input class="modalReqAmount" type="number" value="${r.amount}" placeholder="Kiasi">
+`;
+const delBtn=document.createElement("button");
+delBtn.type="button";
+delBtn.className="danger";
+delBtn.textContent="X";
+delBtn.onclick=function(){
+syncModalReqStateFromDOM();
+modalReqState.splice(i,1);
+renderModalReqRows();
+};
+div.appendChild(delBtn);
+container.appendChild(div);
+});
 }
+function addModalReqRow(){
+syncModalReqStateFromDOM();
+modalReqState.push({id:"r_"+Date.now()+"_"+Math.random().toString(36).slice(2,8),name:"",amount:0});
+renderModalReqRows();
 }
-await db.collection("users").doc(currentUser.uid).collection(collectionName).doc(docId).update({requirements:reqs});
-return reqs;
+function openRequirementsModal(collectionName,docId,requirements,onSaved){
+modalReqState=requirements.map(function(r){return{id:r.id,name:r.name,amount:r.amount}});
+modalReqCollection=collectionName;
+modalReqDocId=docId;
+modalReqOnSaved=onSaved;
+
+$("modalTitle").textContent="Hariri Mahitaji";
+$("modalBody").innerHTML='<div id="modalReqRows"></div><button type="button" class="secondary" onclick="addModalReqRow()" data-sw="+ Ongeza Hitaji" data-en="+ Add Requirement">+ Ongeza Hitaji</button>';
+renderModalReqRows();
+
+const oldBtn=$("modalConfirmBtn");
+const newBtn=oldBtn.cloneNode(true);
+oldBtn.parentNode.replaceChild(newBtn,oldBtn);
+newBtn.textContent="Hifadhi Mahitaji";
+newBtn.onclick=async function(){
+syncModalReqStateFromDOM();
+const cleaned=modalReqState.filter(function(r){return r.name&&r.name.trim()});
+newBtn.disabled=true;
+try{
+await db.collection("users").doc(currentUser.uid).collection(modalReqCollection).doc(modalReqDocId).update({requirements:cleaned});
+closeModal();
+if(modalReqOnSaved)modalReqOnSaved(cleaned);
+}catch(error){
+alert(error.message);
+}
+newBtn.disabled=false;
+};
+$("modalOverlay").classList.remove("hidden");
 }
 
 /* CLASS NAME / TYPE SELECTS */
@@ -1033,14 +1226,16 @@ if(!currentUser)return;
 const type=$("classType").value;
 const nameSel=$("classNameSelect").value;
 const name=nameSel==="__custom__"?$("classNameCustom").value.trim():nameSel;
+const fee=Number($("classFee").value)||0;
 const msg=$("classMsg");
 if(!name){msg.textContent="Chagua au weka jina la darasa.";return}
 const requirements=type==="A"?[]:getRequirements("classRequirements");
 try{
 await db.collection("users").doc(currentUser.uid).collection("classes").add({
-name:name,type:type,requirements:requirements,createdAt:firebase.firestore.FieldValue.serverTimestamp()
+name:name,type:type,fee:fee,requirements:requirements,createdAt:firebase.firestore.FieldValue.serverTimestamp()
 });
 $("classNameCustom").value="";
+$("classFee").value="";
 $("classRequirements").innerHTML="";
 msg.style.color="#16833f";
 msg.textContent="Darasa limehifadhiwa.";
@@ -1103,27 +1298,32 @@ table.appendChild(row);
 renderDashboardClassGrid();
 }
 
-async function editClass(id){
+function editClass(id){
 const cls=allClasses.find(c=>c.id===id);
 if(!cls)return;
-const newName=prompt("Jina jipya la darasa:",cls.name);
-if(newName===null||!newName.trim())return;
-try{
-await db.collection("users").doc(currentUser.uid).collection("classes").doc(id).update({name:newName.trim()});
+openModal("Hariri Jina la Darasa",
+'<label data-sw="Jina jipya la darasa" data-en="New class name">Jina jipya la darasa</label><input id="modalClassName" value="'+escapeHtml(cls.name)+'">',
+async function(){
+const newName=$("modalClassName").value.trim();
+if(!newName)return;
+await db.collection("users").doc(currentUser.uid).collection("classes").doc(id).update({name:newName});
+closeModal();
 loadClasses();
-}catch(error){alert(error.message)}
+}
+);
 }
 
-async function deleteClass(id){
-if(!confirm("Una uhakika unataka kufuta darasa? Hii pia itafuta combinations zake."))return;
+function deleteClass(id,onDeleted){
+openConfirmModal("Futa Darasa","Una uhakika unataka kufuta darasa hili? Hii pia itafuta combinations zake.",async function(){
 await db.collection("users").doc(currentUser.uid).collection("classes").doc(id).delete();
 loadClasses();
 loadDashboard();
+if(onDeleted)onDeleted();
+});
 }
-async function deleteClassFromDetail(){
+function deleteClassFromDetail(){
 if(!currentClassId)return;
-await deleteClass(currentClassId);
-closeClassDetail();
+deleteClass(currentClassId,function(){closeClassDetail()});
 }
 
 /* OPEN / CLOSE CLASS DETAIL */
@@ -1140,12 +1340,12 @@ $("classDetailType").textContent=levelLabel(cls.type);
 
 if(cls.type==="A"){
 $("ctabCombos").classList.remove("hidden");
-$("classReqCard").classList.add("hidden");
+$("classOtherReqSection").classList.add("hidden");
 $("studentCombinationBox").classList.remove("hidden");
 $("classComboFilterBox").classList.remove("hidden");
 }else{
 $("ctabCombos").classList.add("hidden");
-$("classReqCard").classList.remove("hidden");
+$("classOtherReqSection").classList.remove("hidden");
 $("studentCombinationBox").classList.add("hidden");
 $("classComboFilterBox").classList.add("hidden");
 }
@@ -1190,10 +1390,14 @@ $("ovComplete").textContent=list.filter(s=>isStudentComplete(s)).length;
 
 function renderClassRequirementsList(){
 const cls=allClasses.find(c=>c.id===currentClassId);
+if(!cls)return;
+
+$("classFeeDisplay").textContent="Ada: TSh "+Number(cls.fee||0).toLocaleString();
+
 const box=$("classReqList");
 box.innerHTML="";
-if(!cls||!(cls.requirements||[]).length){
-box.innerHTML='<p class="small">Hakuna mahitaji yaliyowekwa.</p>';
+if(!(cls.requirements||[]).length){
+box.innerHTML='<p class="small">Hakuna mahitaji mengine yaliyowekwa.</p>';
 return;
 }
 cls.requirements.forEach(function(r){
@@ -1204,14 +1408,32 @@ box.appendChild(p);
 });
 }
 
+function editClassFee(){
+const cls=allClasses.find(c=>c.id===currentClassId);
+if(!cls)return;
+openModal("Hariri Ada ya Darasa",
+'<label data-sw="Ada (TSh)" data-en="Fee (TSh)">Ada (TSh)</label><input id="modalClassFee" type="number" value="'+(Number(cls.fee)||0)+'">',
+async function(){
+const newFee=Number($("modalClassFee").value)||0;
+await db.collection("users").doc(currentUser.uid).collection("classes").doc(currentClassId).update({fee:newFee});
+cls.fee=newFee;
+closeModal();
+renderClassRequirementsList();
+$("classDetailMsg").style.color="#16833f";
+$("classDetailMsg").textContent="Ada imesasishwa.";
+}
+);
+}
+
 async function editClassRequirements(){
 const cls=allClasses.find(c=>c.id===currentClassId);
 if(!cls)return;
-const updated=await editRequirementsFlow("classes",currentClassId,cls.requirements||[]);
+openRequirementsModal("classes",currentClassId,cls.requirements||[],function(updated){
 cls.requirements=updated;
 renderClassRequirementsList();
 $("classDetailMsg").style.color="#16833f";
 $("classDetailMsg").textContent="Mahitaji yamesasishwa.";
+});
 }
 
 /* COMBINATIONS */
@@ -1284,29 +1506,35 @@ table.appendChild(row);
 populateComboFilter();
 populateStudentComboSelect();
 }
-async function editCombo(id){
+function editCombo(id){
 const combo=allCombinations.find(c=>c.id===id);
 if(!combo)return;
-const newName=prompt("Jina jipya la combination:",combo.name);
-if(newName===null||!newName.trim())return;
-try{
-await db.collection("users").doc(currentUser.uid).collection("combinations").doc(id).update({name:newName.trim()});
-await loadCombinations();
-renderCombosForClass();
-}catch(error){alert(error.message)}
-}
-async function editComboRequirements(id){
-const combo=allCombinations.find(c=>c.id===id);
-if(!combo)return;
-await editRequirementsFlow("combinations",id,combo.requirements||[]);
+openModal("Hariri Combination",
+'<label data-sw="Jina jipya la combination" data-en="New combination name">Jina jipya la combination</label><input id="modalComboName" value="'+escapeHtml(combo.name)+'">',
+async function(){
+const newName=$("modalComboName").value.trim();
+if(!newName)return;
+await db.collection("users").doc(currentUser.uid).collection("combinations").doc(id).update({name:newName});
+closeModal();
 await loadCombinations();
 renderCombosForClass();
 }
-async function deleteCombo(id){
-if(!confirm("Una uhakika unataka kufuta combination hii?"))return;
+);
+}
+function editComboRequirements(id){
+const combo=allCombinations.find(c=>c.id===id);
+if(!combo)return;
+openRequirementsModal("combinations",id,combo.requirements||[],async function(){
+await loadCombinations();
+renderCombosForClass();
+});
+}
+function deleteCombo(id){
+openConfirmModal("Futa Combination","Una uhakika unataka kufuta combination hii?",async function(){
 await db.collection("users").doc(currentUser.uid).collection("combinations").doc(id).delete();
 await loadCombinations();
 renderCombosForClass();
+});
 }
 
 /* STUDENT FORM WITHIN CLASS */
@@ -1361,23 +1589,31 @@ async function addStudentToClass(){
 if(!currentUser||!currentClassId)return;
 const name=$("studentName").value.trim();
 const admission=$("studentAdmission").value.trim();
+const parentPhone=$("studentParentPhone").value.trim();
+const location=$("studentLocation").value.trim();
 const msg=$("studentMsg");
 if(!name){msg.textContent="Jaza jina la mwanafunzi.";return}
+if(!parentPhone){msg.textContent="Weka namba ya mzazi/mlezi.";return}
+if(!location){msg.textContent="Weka sehemu anapoishi.";return}
 
 const cls=allClasses.find(c=>c.id===currentClassId);
 let comboId="";
 let comboName="";
-let requirements=[];
+let otherRequirements=[];
 
 if(cls.type==="A"){
 comboId=$("studentCombination").value;
 if(!comboId){msg.textContent="Chagua combination.";return}
 const combo=allCombinations.find(c=>c.id===comboId);
 comboName=combo?combo.name:"";
-requirements=combo?combo.requirements||[]:[];
+otherRequirements=combo?combo.requirements||[]:[];
 }else{
-requirements=cls.requirements||[];
+otherRequirements=cls.requirements||[];
 }
+
+/* Ada is always one fixed requirement per class, applied to every student regardless of combination */
+const adaRequirement={id:"ada",name:"Ada",amount:Number(cls.fee)||0};
+const requirements=[adaRequirement].concat(otherRequirements);
 
 const status={};
 requirements.forEach(function(r){
@@ -1387,13 +1623,16 @@ status[r.id]=input?(Number(input.value)||0):0;
 
 try{
 await db.collection("users").doc(currentUser.uid).collection("students").add({
-name:name,admission:admission,classId:currentClassId,className:cls.name,level:cls.type,
+name:name,admission:admission,parentPhone:parentPhone,location:location,
+classId:currentClassId,className:cls.name,level:cls.type,
 combinationId:comboId,combinationName:comboName,requirements:requirements,status:status,
 createdAt:firebase.firestore.FieldValue.serverTimestamp()
 });
 
 $("studentName").value="";
 $("studentAdmission").value="";
+$("studentParentPhone").value="";
+$("studentLocation").value="";
 $("studentCombination").value="";
 $("studentRequirements").innerHTML="";
 
@@ -1408,6 +1647,116 @@ renderClassStudentsTab("students");
 msg.style.color="#c62828";
 msg.textContent=error.message;
 }
+}
+
+/* BULK IMPORT (CSV) */
+function parseCsvLine(line){
+const result=[];
+let cur="";
+let inQuotes=false;
+for(let i=0;i<line.length;i++){
+const ch=line[i];
+if(ch==='"'){
+inQuotes=!inQuotes;
+}else if(ch===","&&!inQuotes){
+result.push(cur.trim());
+cur="";
+}else{
+cur+=ch;
+}
+}
+result.push(cur.trim());
+return result;
+}
+
+async function bulkImportStudents(){
+const fileInput=$("bulkImportFile");
+const msg=$("bulkImportMsg");
+const file=fileInput.files[0];
+if(!file){msg.textContent="Chagua faili la CSV kwanza.";return}
+if(!currentClassId){msg.textContent="Chagua darasa kwanza.";return}
+
+const cls=allClasses.find(c=>c.id===currentClassId);
+if(!cls){msg.textContent="Darasa halikupatikana.";return}
+
+const reader=new FileReader();
+reader.onload=async function(e){
+try{
+const text=e.target.result;
+const lines=text.split(/\r?\n/).filter(function(l){return l.trim()});
+if(lines.length<2){msg.textContent="Faili halina wanafunzi wa kutosha.";return}
+
+const headers=parseCsvLine(lines[0]).map(function(h){return h.trim().toLowerCase()});
+const idxName=headers.indexOf("jina");
+const idxAdmission=headers.indexOf("admission");
+const idxParent=headers.indexOf("nambayamzazi");
+const idxLocation=headers.indexOf("sehemu");
+const idxCombo=headers.indexOf("combination");
+
+if(idxName===-1){msg.textContent="Faili lazima liwe na column ya 'Jina'.";return}
+
+const adaRequirement={id:"ada",name:"Ada",amount:Number(cls.fee)||0};
+let successCount=0;
+let failCount=0;
+
+for(let i=1;i<lines.length;i++){
+const cols=parseCsvLine(lines[i]);
+const name=(cols[idxName]||"").trim();
+if(!name)continue;
+
+const admission=idxAdmission>-1?(cols[idxAdmission]||"").trim():"";
+const parentPhone=idxParent>-1?(cols[idxParent]||"").trim():"";
+const location=idxLocation>-1?(cols[idxLocation]||"").trim():"";
+
+let comboId="";
+let comboName="";
+let otherRequirements=[];
+
+if(cls.type==="A"){
+const comboNameFromFile=idxCombo>-1?(cols[idxCombo]||"").trim():"";
+const combo=allCombinations.find(function(c){
+return c.classId===currentClassId&&c.name.toLowerCase()===comboNameFromFile.toLowerCase();
+});
+if(!combo){failCount++;continue}
+comboId=combo.id;
+comboName=combo.name;
+otherRequirements=combo.requirements||[];
+}else{
+otherRequirements=cls.requirements||[];
+}
+
+const requirements=[adaRequirement].concat(otherRequirements);
+const status={};
+requirements.forEach(function(r){status[r.id]=0});
+
+try{
+await db.collection("users").doc(currentUser.uid).collection("students").add({
+name:name,admission:admission,parentPhone:parentPhone,location:location,
+classId:currentClassId,className:cls.name,level:cls.type,
+combinationId:comboId,combinationName:comboName,requirements:requirements,status:status,
+createdAt:firebase.firestore.FieldValue.serverTimestamp()
+});
+successCount++;
+}catch(error){
+failCount++;
+}
+}
+
+msg.style.color="#16833f";
+msg.textContent="Imefanikiwa: "+successCount+" wamesajiliwa."+(failCount?(" Walioshindwa: "+failCount+" (angalia Combination sahihi)."):"");
+fileInput.value="";
+
+await loadStudents();
+renderClassOverview();
+renderClassStudentsTab("students");
+loadDashboard();
+
+}catch(error){
+msg.style.color="#c62828";
+msg.textContent="Hitilafu: "+error.message;
+}
+};
+reader.readAsText(file);
 }
 
 async function loadStudents(){
@@ -1455,7 +1804,7 @@ list.forEach(function(s){(s.requirements||[]).forEach(function(r){reqMap[r.id]=r
 const head=$(headId);
 head.innerHTML="";
 const hr=document.createElement("tr");
-["Jina","Admission","Combination","Tarehe ya Usajili"].forEach(function(x){
+["Jina","Admission","Namba ya Mzazi","Combination","Tarehe ya Usajili"].forEach(function(x){
 const th=document.createElement("th");
 th.textContent=x;
 hr.appendChild(th);
@@ -1487,6 +1836,7 @@ return td;
 
 row.appendChild(cell(s.name));
 row.appendChild(cell(s.admission));
+row.appendChild(cell(s.parentPhone));
 row.appendChild(cell(s.combinationName));
 row.appendChild(cell(formatDate(s.createdAt)));
 
@@ -1528,33 +1878,51 @@ body.appendChild(row);
 });
 }
 
-async function editStudent(id){
+function editStudent(id){
 const student=allStudents.find(s=>s.id===id);
 if(!student)return;
 
-const newName=prompt("Jina la mwanafunzi:",student.name);
-if(newName===null)return;
-const newAdmission=prompt("Admission Number (hiari):",student.admission||"");
-if(newAdmission===null)return;
+let bodyHtml=`
+<label data-sw="Jina la mwanafunzi" data-en="Student name">Jina la mwanafunzi</label>
+<input id="modalStudentName" value="${escapeHtml(student.name)}">
+<label data-sw="Admission Number (Hiari)" data-en="Admission Number (Optional)">Admission Number (Hiari)</label>
+<input id="modalStudentAdmission" value="${escapeHtml(student.admission||"")}">
+<label data-sw="Namba ya Mzazi/Mlezi" data-en="Parent/Guardian Phone">Namba ya Mzazi/Mlezi</label>
+<input id="modalStudentParentPhone" type="tel" value="${escapeHtml(student.parentPhone||"")}">
+<label data-sw="Sehemu Anapoishi" data-en="Location">Sehemu Anapoishi</label>
+<input id="modalStudentLocation" value="${escapeHtml(student.location||"")}">
+`;
+
+if((student.requirements||[]).length){
+bodyHtml+='<h3 style="margin-top:14px" data-sw="Mahitaji" data-en="Requirements">Mahitaji</h3>';
+student.requirements.forEach(function(r){
+const submitted=Number((student.status||{})[r.id])||0;
+bodyHtml+=`
+<div class="reqCheck">
+<span style="flex:1">${escapeHtml(r.name)} <span class="small">(Inatakiwa: ${Number(r.amount).toLocaleString()})</span></span>
+<input type="number" class="modalStudentReqAmt" data-id="${r.id}" value="${submitted}" style="width:100px;margin:0">
+</div>`;
+});
+}
+
+openModal("Hariri Mwanafunzi",bodyHtml,async function(){
+const newName=$("modalStudentName").value.trim();
+const newAdmission=$("modalStudentAdmission").value.trim();
+const newParentPhone=$("modalStudentParentPhone").value.trim();
+const newLocation=$("modalStudentLocation").value.trim();
+if(!newName)return;
+if(!newParentPhone)return;
 
 const status=Object.assign({},student.status||{});
-(student.requirements||[]).forEach(function(r){
-const current=Number(status[r.id])||0;
-const answer=prompt(
-r.name+" - Inatakiwa: "+Number(r.amount).toLocaleString()+"\nKilicholetwa sasa: "+current+
-"\n\nWeka kiasi kipya cha jumla kilicholetwa (Cancel = usibadilishe):",
-current
-);
-if(answer!==null){
-const num=Number(answer);
-if(!isNaN(num))status[r.id]=num;
-}
+document.querySelectorAll(".modalStudentReqAmt").forEach(function(input){
+const rid=input.getAttribute("data-id");
+status[rid]=Number(input.value)||0;
 });
 
-try{
 await db.collection("users").doc(currentUser.uid).collection("students").doc(id).update({
-name:newName.trim(),admission:newAdmission.trim(),status:status
+name:newName,admission:newAdmission,parentPhone:newParentPhone,location:newLocation,status:status
 });
+closeModal();
 await loadStudents();
 if(currentClassId){
 renderClassOverview();
@@ -1563,13 +1931,12 @@ renderClassStudentsTab("debt");
 renderClassStudentsTab("complete");
 }
 loadDashboard();
-}catch(error){
-alert(error.message);
-}
+if(!$("searchPage").classList.contains("hidden"))performSearch();
+});
 }
 
-async function deleteStudent(id){
-if(!confirm("Una uhakika unataka kufuta mwanafunzi?"))return;
+function deleteStudent(id){
+openConfirmModal("Futa Mwanafunzi","Una uhakika unataka kufuta mwanafunzi?",async function(){
 await db.collection("users").doc(currentUser.uid).collection("students").doc(id).delete();
 await loadStudents();
 if(currentClassId){
@@ -1579,6 +1946,7 @@ renderClassStudentsTab("debt");
 renderClassStudentsTab("complete");
 }
 loadDashboard();
+});
 }
 
 /* EXPORT */
@@ -1611,8 +1979,6 @@ const csv=rows.map(function(row){
 return row.map(function(value){return '"'+String(value).replace(/"/g,'""')+'"'}).join(",");
 }).join("\n");
 
-/* Use a data: URI instead of blob: - some Android browsers/download managers
-   cannot download blob: URLs served from GitHub Pages and similar static hosts */
 const dataUri="data:text/csv;charset=utf-8,"+encodeURIComponent("\ufeff"+csv);
 const a=document.createElement("a");
 const cls=allClasses.find(c=>c.id===currentClassId);
@@ -1674,6 +2040,8 @@ if(!r){$("adaReqInfo").textContent="";return}
 const submitted=Number((student.status||{})[reqId])||0;
 $("adaReqInfo").textContent="Inatakiwa: "+Number(r.amount).toLocaleString()+" | Imeshaletwa: "+submitted.toLocaleString()+" | Baki: "+Math.max(0,Number(r.amount)-submitted).toLocaleString();
 }
+let lastReceiptData=null;
+
 async function addAdaPayment(){
 const studentId=$("adaStudentSelect").value;
 const reqId=$("adaRequirementSelect").value;
@@ -1694,6 +2062,17 @@ amount:amount,createdAt:firebase.firestore.FieldValue.serverTimestamp()
 $("adaAmount").value="";
 msg.style.color="#16833f";
 msg.textContent="Malipo yamehifadhiwa.";
+
+const remaining=Math.max(0,(Number(req?req.amount:0))-(Number(newStatus[reqId])||0));
+lastReceiptData={
+studentName:student.name,
+requirementName:req?req.name:"",
+amount:amount,
+remaining:remaining,
+parentPhone:student.parentPhone||""
+};
+$("adaReceiptBox").classList.remove("hidden");
+
 await loadStudents();
 populateAdaStudentSelect();
 $("adaStudentSelect").value=studentId;
@@ -1709,6 +2088,22 @@ msg.style.color="#c62828";
 msg.textContent=error.message;
 }
 }
+
+function sendAdaReceipt(){
+if(!lastReceiptData)return;
+const schoolName=currentUserData?currentUserData.schoolName:"Shule";
+const text="RISITI - "+schoolName+"\nMwanafunzi: "+lastReceiptData.studentName+
+"\nHitaji: "+lastReceiptData.requirementName+
+"\nKiasi kilicholipwa: TSh "+lastReceiptData.amount.toLocaleString()+
+"\nBaki: TSh "+lastReceiptData.remaining.toLocaleString()+
+"\nAsante.";
+let phone=lastReceiptData.parentPhone.replace(/[^0-9]/g,"");
+if(phone.startsWith("0"))phone="255"+phone.slice(1);
+if(!phone.startsWith("255"))phone="255"+phone;
+const url="https://wa.me/"+phone+"?text="+encodeURIComponent(text);
+window.open(url,"_blank");
+}
+
 async function renderAdaTable(){
 const table=$("adaTable");
 table.innerHTML="";
@@ -1821,6 +2216,9 @@ $("settingsPhone").value=currentUserData.phone||"";
 
 if(currentUserData.logoData){displayLogo(currentUserData.logoData)}else{hideLogo()}
 
+applyTheme(currentUserData.themeColor||"indigo");
+renderThemeSwatches(currentUserData.themeColor||"indigo");
+
 loadDashboard();
 
 }catch(error){console.error(error)}
@@ -1914,8 +2312,8 @@ $("schoolLogo").classList.add("hidden");
 $("logoPlaceholder").classList.remove("hidden");
 $("topSchoolLogo").classList.add("hidden");
 }
-async function deleteLogo(){
-if(!confirm("Una uhakika unataka kufuta nembo?"))return;
+function deleteLogo(){
+openConfirmModal("Futa Nembo","Una uhakika unataka kufuta nembo?",async function(){
 try{
 await db.collection("users").doc(currentUser.uid).update({logoData:""});
 hideLogo();
@@ -1925,6 +2323,7 @@ $("logoMsg").textContent="Nembo imefutwa.";
 $("logoMsg").style.color="#c62828";
 $("logoMsg").textContent=error.message;
 }
+});
 }
 
 /* CHANGE PASSWORD */
