@@ -130,7 +130,7 @@ font-weight:700;box-shadow:0 6px 16px rgba(79,70,229,.3);
 position:relative;
 display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;
 background:var(--grad-hero);padding:16px 60px 16px 18px;border-radius:16px;color:#fff;
-flex-wrap:nowrap;overflow:hidden;
+flex-wrap:nowrap;
 }
 .schoolHeading{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
 .schoolHeading > div{min-width:0}
@@ -271,7 +271,6 @@ width:50px;height:50px;border-radius:50%;border:3px solid transparent;cursor:poi
 .grid{grid-template-columns:1fr}
 .choice{grid-template-columns:1fr}
 .classGrid{grid-template-columns:1fr}
-.topbar{flex-wrap:wrap}
 }
 </style>
 </head>
@@ -868,11 +867,85 @@ return "lvl-O";
 }
 
 /* LANGUAGE */
+/* TRANSLATION DICTIONARY for JS-generated dynamic content (tables, buttons, modals) */
+const T={
+sw:{
+jina:"Jina",admission:"Admission",parentPhone:"Namba ya Mzazi",combination:"Combination",
+regDate:"Tarehe ya Usajili",hali:"Hali",action:"Action",edit:"Edit",delete:"Delete",
+open:"Fungua",requirements:"Mahitaji",complete:"✓ Amekamilisha",debt:"✗ Anadaiwa",
+noResults:"Hakuna aliyepatikana.",registeredOn:"Amesajiliwa",
+editClassTitle:"Hariri Jina la Darasa",editComboTitle:"Hariri Combination",
+editStudentTitle:"Hariri Mwanafunzi",deleteClassTitle:"Futa Darasa",
+deleteComboTitle:"Futa Combination",deleteStudentTitle:"Futa Mwanafunzi",
+deleteLogoTitle:"Futa Nembo",editFeeTitle:"Hariri Ada ya Darasa",
+editReqTitle:"Hariri Mahitaji",newClassName:"Jina jipya la darasa",
+newComboName:"Jina jipya la combination",
+confirmDeleteClass:"Una uhakika unataka kufuta darasa hili? Hii pia itafuta combinations zake.",
+confirmDeleteCombo:"Una uhakika unataka kufuta combination hii?",
+confirmDeleteStudent:"Una uhakika unataka kufuta mwanafunzi?",
+confirmDeleteLogo:"Una uhakika unataka kufuta nembo?",
+save:"Hifadhi",cancel:"Ghairi",confirm:"Thibitisha",addRequirement:"+ Ongeza Hitaji",
+reqNamePh:"Jina la hitaji",reqAmountPh:"Kiasi",saveRequirements:"Hifadhi Mahitaji",
+feeLabel:"Ada (TSh)",combosZote:"Combination zote",madarasaZote:"Madarasa yote",
+download:"Pakua",noStudentsExport:"Hakuna wanafunzi wa kupakua."
+},
+en:{
+jina:"Name",admission:"Admission",parentPhone:"Parent Phone",combination:"Combination",
+regDate:"Registration Date",hali:"Status",action:"Action",edit:"Edit",delete:"Delete",
+open:"Open",requirements:"Requirements",complete:"✓ Complete",debt:"✗ Owing",
+noResults:"No student found.",registeredOn:"Registered",
+editClassTitle:"Edit Class Name",editComboTitle:"Edit Combination",
+editStudentTitle:"Edit Student",deleteClassTitle:"Delete Class",
+deleteComboTitle:"Delete Combination",deleteStudentTitle:"Delete Student",
+deleteLogoTitle:"Delete Logo",editFeeTitle:"Edit Class Fee",
+editReqTitle:"Edit Requirements",newClassName:"New class name",
+newComboName:"New combination name",
+confirmDeleteClass:"Are you sure you want to delete this class? This will also delete its combinations.",
+confirmDeleteCombo:"Are you sure you want to delete this combination?",
+confirmDeleteStudent:"Are you sure you want to delete this student?",
+confirmDeleteLogo:"Are you sure you want to delete the logo?",
+save:"Save",cancel:"Cancel",confirm:"Confirm",addRequirement:"+ Add Requirement",
+reqNamePh:"Requirement name",reqAmountPh:"Amount",saveRequirements:"Save Requirements",
+feeLabel:"Fee (TSh)",combosZote:"All combinations",madarasaZote:"All classes",
+download:"Download",noStudentsExport:"No students to download."
+}
+};
+function t(key){
+const lang=($("language")&&$("language").value)||"sw";
+return (T[lang]&&T[lang][key]!==undefined)?T[lang][key]:(T.sw[key]||key);
+}
+
+/* Re-render whatever dynamic view is currently visible, in the new language */
+function refreshCurrentView(){
+if(!$("appSection")||$("appSection").classList.contains("hidden"))return;
+
+if(!$("dashboardPage").classList.contains("hidden")){
+loadDashboard();
+}
+
+if(!$("classesPage").classList.contains("hidden")){
+if(!$("classDetailView").classList.contains("hidden")){
+renderClassOverview();
+if(!$("classTabCombos").classList.contains("hidden"))renderCombosForClass();
+if(!$("classTabStudents").classList.contains("hidden")){populateComboFilter();renderClassStudentsTab("students")}
+if(!$("classTabDebt").classList.contains("hidden"))renderClassStudentsTab("debt");
+if(!$("classTabComplete").classList.contains("hidden"))renderClassStudentsTab("complete");
+}else{
+loadClasses();
+}
+}
+
+if(!$("searchPage").classList.contains("hidden")&&$("searchInput").value){
+performSearch();
+}
+}
+
 function changeLanguage(){
 const language=$("language").value;
 document.querySelectorAll("[data-sw]").forEach(function(el){
 el.textContent=language==="sw"?el.getAttribute("data-sw"):el.getAttribute("data-en");
 });
+refreshCurrentView();
 }
 function continueLanguage(){
 $("languageSection").classList.add("hidden");
@@ -1270,19 +1343,19 @@ const c3=document.createElement("td");
 
 const open=document.createElement("button");
 open.className="success";
-open.textContent="Fungua";
+open.textContent=t("open");
 open.style.marginRight="5px";
 open.onclick=function(){openClass(doc.id)};
 
 const edit=document.createElement("button");
 edit.className="neutral";
-edit.textContent="Edit";
+edit.textContent=t("edit");
 edit.style.marginRight="5px";
 edit.onclick=function(){editClass(doc.id)};
 
 const del=document.createElement("button");
 del.className="danger";
-del.textContent="Delete";
+del.textContent=t("delete");
 del.onclick=function(){deleteClass(doc.id)};
 
 c3.appendChild(open);
@@ -1301,7 +1374,7 @@ renderDashboardClassGrid();
 function editClass(id){
 const cls=allClasses.find(c=>c.id===id);
 if(!cls)return;
-openModal("Hariri Jina la Darasa",
+openModal(t("editClassTitle"),
 '<label data-sw="Jina jipya la darasa" data-en="New class name">Jina jipya la darasa</label><input id="modalClassName" value="'+escapeHtml(cls.name)+'">',
 async function(){
 const newName=$("modalClassName").value.trim();
@@ -1314,7 +1387,7 @@ loadClasses();
 }
 
 function deleteClass(id,onDeleted){
-openConfirmModal("Futa Darasa","Una uhakika unataka kufuta darasa hili? Hii pia itafuta combinations zake.",async function(){
+openConfirmModal(t("deleteClassTitle"),t("confirmDeleteClass"),async function(){
 await db.collection("users").doc(currentUser.uid).collection("classes").doc(id).delete();
 loadClasses();
 loadDashboard();
@@ -1411,7 +1484,7 @@ box.appendChild(p);
 function editClassFee(){
 const cls=allClasses.find(c=>c.id===currentClassId);
 if(!cls)return;
-openModal("Hariri Ada ya Darasa",
+openModal(t("editFeeTitle"),
 '<label data-sw="Ada (TSh)" data-en="Fee (TSh)">Ada (TSh)</label><input id="modalClassFee" type="number" value="'+(Number(cls.fee)||0)+'">',
 async function(){
 const newFee=Number($("modalClassFee").value)||0;
@@ -1480,20 +1553,20 @@ const c2=document.createElement("td");
 
 const editBtn=document.createElement("button");
 editBtn.className="neutral";
-editBtn.textContent="Edit";
+editBtn.textContent=t("edit");
 editBtn.style.marginRight="5px";
 editBtn.onclick=function(){editCombo(c.id)};
 
 const reqBtn=document.createElement("button");
 reqBtn.className="secondary";
 reqBtn.style.width="auto";
-reqBtn.textContent="Mahitaji";
+reqBtn.textContent=t("requirements");
 reqBtn.style.marginRight="5px";
 reqBtn.onclick=function(){editComboRequirements(c.id)};
 
 const delBtn=document.createElement("button");
 delBtn.className="danger";
-delBtn.textContent="Delete";
+delBtn.textContent=t("delete");
 delBtn.onclick=function(){deleteCombo(c.id)};
 
 c2.appendChild(editBtn);
@@ -1509,7 +1582,7 @@ populateStudentComboSelect();
 function editCombo(id){
 const combo=allCombinations.find(c=>c.id===id);
 if(!combo)return;
-openModal("Hariri Combination",
+openModal(t("editComboTitle"),
 '<label data-sw="Jina jipya la combination" data-en="New combination name">Jina jipya la combination</label><input id="modalComboName" value="'+escapeHtml(combo.name)+'">',
 async function(){
 const newName=$("modalComboName").value.trim();
@@ -1530,7 +1603,7 @@ renderCombosForClass();
 });
 }
 function deleteCombo(id){
-openConfirmModal("Futa Combination","Una uhakika unataka kufuta combination hii?",async function(){
+openConfirmModal(t("deleteComboTitle"),t("confirmDeleteCombo"),async function(){
 await db.collection("users").doc(currentUser.uid).collection("combinations").doc(id).delete();
 await loadCombinations();
 renderCombosForClass();
@@ -1804,7 +1877,7 @@ list.forEach(function(s){(s.requirements||[]).forEach(function(r){reqMap[r.id]=r
 const head=$(headId);
 head.innerHTML="";
 const hr=document.createElement("tr");
-["Jina","Admission","Namba ya Mzazi","Combination","Tarehe ya Usajili"].forEach(function(x){
+[t("jina"),t("admission"),t("parentPhone"),t("combination"),t("regDate")].forEach(function(x){
 const th=document.createElement("th");
 th.textContent=x;
 hr.appendChild(th);
@@ -1815,10 +1888,10 @@ th.textContent=reqMap[id];
 hr.appendChild(th);
 });
 let th=document.createElement("th");
-th.textContent="Hali";
+th.textContent=t("hali");
 hr.appendChild(th);
 th=document.createElement("th");
-th.textContent="Action";
+th.textContent=t("action");
 hr.appendChild(th);
 head.appendChild(hr);
 
@@ -1855,21 +1928,21 @@ row.appendChild(td);
 
 const state=document.createElement("td");
 state.innerHTML=isStudentComplete(s)
-?'<span class="badge badgeYes">✓ Amekamilisha</span>'
-:'<span class="badge badgeNo">✗ Anadaiwa</span>';
+?'<span class="badge badgeYes">'+escapeHtml(t("complete"))+'</span>'
+:'<span class="badge badgeNo">'+escapeHtml(t("debt"))+'</span>';
 row.appendChild(state);
 
 const action=document.createElement("td");
 const edit=document.createElement("button");
 edit.className="success";
-edit.textContent="Edit";
+edit.textContent=t("edit");
 edit.onclick=function(){editStudent(s.id)};
 action.appendChild(edit);
 
 const del=document.createElement("button");
 del.className="danger";
 del.style.marginLeft="5px";
-del.textContent="Delete";
+del.textContent=t("delete");
 del.onclick=function(){deleteStudent(s.id)};
 action.appendChild(del);
 
@@ -1905,7 +1978,7 @@ bodyHtml+=`
 });
 }
 
-openModal("Hariri Mwanafunzi",bodyHtml,async function(){
+openModal(t("editStudentTitle"),bodyHtml,async function(){
 const newName=$("modalStudentName").value.trim();
 const newAdmission=$("modalStudentAdmission").value.trim();
 const newParentPhone=$("modalStudentParentPhone").value.trim();
@@ -1936,7 +2009,7 @@ if(!$("searchPage").classList.contains("hidden"))performSearch();
 }
 
 function deleteStudent(id){
-openConfirmModal("Futa Mwanafunzi","Una uhakika unataka kufuta mwanafunzi?",async function(){
+openConfirmModal(t("deleteStudentTitle"),t("confirmDeleteStudent"),async function(){
 await db.collection("users").doc(currentUser.uid).collection("students").doc(id).delete();
 await loadStudents();
 if(currentClassId){
@@ -1950,28 +2023,28 @@ loadDashboard();
 }
 
 /* EXPORT */
-function exportClassStudents(type){
+async function exportClassStudents(type){
 let list=allStudents.filter(s=>s.classId===currentClassId);
 if(type==="debt")list=list.filter(s=>!isStudentComplete(s));
 if(type==="complete")list=list.filter(s=>isStudentComplete(s));
-if(!list.length){alert("Hakuna wanafunzi wa ku-export.");return}
+if(!list.length){alert(t("noStudentsExport"));return}
 
 const reqMap={};
 list.forEach(function(s){(s.requirements||[]).forEach(function(r){reqMap[r.id]=r.name})});
 
-const headers=["Jina","Admission","Combination","Tarehe ya Usajili"];
+const headers=[t("jina"),t("admission"),t("parentPhone"),t("combination"),t("regDate")];
 Object.keys(reqMap).forEach(function(id){headers.push(reqMap[id])});
-headers.push("Hali");
+headers.push(t("hali"));
 
 const rows=[headers];
 list.forEach(function(s){
-const row=[s.name||"",s.admission||"",s.combinationName||"",formatDate(s.createdAt)];
+const row=[s.name||"",s.admission||"",s.parentPhone||"",s.combinationName||"",formatDate(s.createdAt)];
 Object.keys(reqMap).forEach(function(id){
 const found=(s.requirements||[]).find(r=>r.id===id);
 const submitted=Number((s.status||{})[id])||0;
 row.push(found?(submitted+"/"+Number(found.amount)):"-");
 });
-row.push(isStudentComplete(s)?"Amekamilisha":"Anadaiwa");
+row.push(isStudentComplete(s)?t("complete"):t("debt"));
 rows.push(row);
 });
 
@@ -1979,14 +2052,27 @@ const csv=rows.map(function(row){
 return row.map(function(value){return '"'+String(value).replace(/"/g,'""')+'"'}).join(",");
 }).join("\n");
 
-const dataUri="data:text/csv;charset=utf-8,"+encodeURIComponent("\ufeff"+csv);
-const a=document.createElement("a");
 const cls=allClasses.find(c=>c.id===currentClassId);
-a.href=dataUri;
-a.download="shulesmart-"+(cls?cls.name.replace(/\s+/g,"_"):"darasa")+".csv";
-document.body.appendChild(a);
-a.click();
-document.body.removeChild(a);
+const filename="shulesmart-"+(cls?cls.name.replace(/\s+/g,"_"):"darasa")+".csv";
+const csvWithBom="\ufeff"+csv;
+
+/* PRIORITY 1: Native Share Sheet - most reliable way to save/share files on Android */
+if(navigator.canShare&&navigator.share){
+try{
+const file=new File([csvWithBom],filename,{type:"text/csv"});
+if(navigator.canShare({files:[file]})){
+await navigator.share({files:[file],title:filename});
+return;
+}
+}catch(error){
+if(error&&error.name==="AbortError")return;
+/* share failed for another reason - fall through to link method below */
+}
+}
+
+/* PRIORITY 2: fallback - open a new tab with the data so it never navigates away from the app itself */
+const dataUri="data:text/csv;charset=utf-8,"+encodeURIComponent(csvWithBom);
+window.open(dataUri,"_blank");
 }
 
 /* DASHBOARD CLASS GRID */
@@ -2131,22 +2217,22 @@ if(!q)return;
 const results=allStudents.filter(function(s){
 return (s.name||"").toLowerCase().includes(q)||(s.admission||"").toLowerCase().includes(q);
 }).slice(0,50);
-if(!results.length){box.innerHTML='<p class="small">Hakuna aliyepatikana.</p>';return}
+if(!results.length){box.innerHTML='<p class="small">'+escapeHtml(t("noResults"))+'</p>';return}
 results.forEach(function(s){
 const div=document.createElement("div");
 div.className="searchResultCard";
 div.innerHTML=`
-<strong>${s.name}</strong><br>
-<span class="small">${s.className||""}${s.combinationName?" ("+s.combinationName+")":""}</span><br>
-<span class="small">Amesajiliwa: ${formatDate(s.createdAt)}</span><br>
-<span class="badge ${isStudentComplete(s)?'badgeYes':'badgeNo'}" style="margin-top:6px;display:inline-block">${isStudentComplete(s)?"✓ Amekamilisha":"✗ Anadaiwa"}</span>
+<strong>${escapeHtml(s.name)}</strong><br>
+<span class="small">${escapeHtml(s.className||"")}${s.combinationName?" ("+escapeHtml(s.combinationName)+")":""}</span><br>
+<span class="small">${escapeHtml(t("registeredOn"))}: ${formatDate(s.createdAt)}</span><br>
+<span class="badge ${isStudentComplete(s)?'badgeYes':'badgeNo'}" style="margin-top:6px;display:inline-block">${isStudentComplete(s)?escapeHtml(t("complete")):escapeHtml(t("debt"))}</span>
 `;
 const editBtn=document.createElement("button");
 editBtn.className="success";
 editBtn.style.marginTop="8px";
 editBtn.style.marginLeft="8px";
-editBtn.textContent="Edit";
-editBtn.onclick=function(){editStudent(s.id).then(performSearch)};
+editBtn.textContent=t("edit");
+editBtn.onclick=function(){editStudent(s.id)};
 div.appendChild(editBtn);
 box.appendChild(div);
 });
@@ -2313,7 +2399,7 @@ $("logoPlaceholder").classList.remove("hidden");
 $("topSchoolLogo").classList.add("hidden");
 }
 function deleteLogo(){
-openConfirmModal("Futa Nembo","Una uhakika unataka kufuta nembo?",async function(){
+openConfirmModal(t("deleteLogoTitle"),t("confirmDeleteLogo"),async function(){
 try{
 await db.collection("users").doc(currentUser.uid).update({logoData:""});
 hideLogo();
